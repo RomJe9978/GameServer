@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    日志方案说明：
+    1. 选择异步日志方式，效率高，性能好，且解耦，业务线程无需一直等待。
+    2. Log4j2异步日志方式支持Async Logger和Async Appender，选择基于disruptor的AsyncLogger方式。
+    3. Async Logger可细分为：All async loggers（通过系统变量实现）和Mixed loggers（通过配置文件实现）。
+    4. All async logger性能更优秀，在64线程以上大机器上表现更为优异。
+    5. Mixed loggers性能稍逊于All async logger()，但配置更为灵活。
+    该配置文件采用Async Logger方式，选型为Mixed loggers！
+ -->
+
+<!-- status用来指定log4j本身的打印日志的级别 -->
+<!-- monitorInterval用于指定log4j自动重新配置的监测间隔时间，单位是s,默认是0不检测 -->
+<Configuration status="info" monitorInterval="0">
+    <Properties>
+        <!--%d:显示日期 %t:线程名 %m:输出消息 %n:换行符 highlight用于设置日志颜色(idea中需要添加jvm参数-Dlog4j.skipJansi=false)-->
+        <property name="LOG_PATTERN" value="%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level (%F\:%L) - %msg%n}{ERROR=RED,WARN=YELLOW,INFO=CYAN}" />
+        <!--日志文件编码格式-->
+        <property name="CHARSET" value="UTF-8"/>
+        <!--日志存储的目录文件夹 -->
+        <property name="LOG_DIR" value="logs" />
+        <!--约定文件拆分大小-->
+        <property name="MAX_FILE_SIZE" value="128MB" />
+    </Properties>
+
+    <Appenders>
+        <!-- 默认控制台展示调试，任何需要在控制台便于调试的日志，追加该appender -->
+        <console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout charset="${CHARSET}" pattern="${LOG_PATTERN}" />
+            <!--控制台只输出level及其以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
+        </console>
+
+        <!--滚动文件appender配置-->
+        <!--filePattern:压缩日志文件的文件名的模式,即Policies产生的文件名 -->
+        <!--immediateFlush:默认为true，写log后flush.注意，当使用异步时，immediateFlush设置无效，必为false -->
+        <RollingRandomAccessFile name="StdoutAppender"
+                                 fileName="${LOG_DIR}/stdout/stdout.log"
+                                 filePattern="${LOG_DIR}/stdout/stdout.log.%d{yyyy.MM.dd.HH}-%i"
+                                 immediateFlush="false">
+            <PatternLayout charset="${CHARSET}" pattern="${LOG_PATTERN}" />
+            <Policies>
+                <!--文件滚动原则，可以同时配置组合-->
+                <!--时间原则，超过interval之后，产生新的文件，单位小时-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <!--Size原则，超过指定大小后，产生新的文件-->
+                <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}" />
+            </Policies>
+            <!--max标识当前日志文件夹下滚动产生的最大文件个数，超出则覆盖之前文件，默认7-->
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+
+        <!--所有error日志统一额外处理到指定文件下-->
+        <RollingRandomAccessFile name="ErrorAppender"
+                                 fileName="${LOG_DIR}/error/error.log"
+                                 filePattern="${LOG_DIR}/error/error.log.%d{yyyy.MM.dd.HH}-%i"
+                                 immediateFlush="true">
+            <PatternLayout charset="${CHARSET}" pattern="${LOG_PATTERN}" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="16"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <!--如果不需要位置信息，includeLocation可以为false调优-->
+        <AsyncLogger name="LogicLog" additivity="false" includeLocation="true">
+            <appender-ref ref="ConsoleAppender" />
+            <appender-ref ref="StdoutAppender" />
+            <appender-ref ref="ErrorAppender" level="error"/>
+        </AsyncLogger>
+
+        <!--root代表找不到具体logger后的默认logger，类似switch-case中的default-->
+        <Root level="info" additivity="false" includeLocation="true">
+            <appender-ref ref="ConsoleAppender"/>
+            <appender-ref ref="StdoutAppender"/>
+            <appender-ref ref="ErrorAppender" level="error"/>
+        </Root>
+    </Loggers>
+</Configuration>
