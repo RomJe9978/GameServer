@@ -1,9 +1,9 @@
 package com.romje.utils;
 
 /**
- * This util is used to handle math.
+ * This util is used to handle math calculation.
  *
- * @author liuxuanjie
+ * @author RomJe
  */
 public class MathUtil {
 }

@@ -1,19 +1,12 @@
 package com.romje.log;
 
-//import org.apache.logging.log4j.LogManager;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-
-//import org.apache.logging.log4j.LogManager;
-//import org.apache.logging.log4j.Logger;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * 游戏中的日志管理器
  *
- * @author liuxuanjie
+ * @author RomJe
  */
 public class GameLog {
 

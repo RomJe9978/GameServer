@@ -3,7 +3,7 @@ package com.romje.utils;
 /**
  * This util is used to handle string.
  *
- * @author liuxuanjie
+ * @author RomJe
  */
 public class StringUtil {
 }

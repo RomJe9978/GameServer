@@ -6,11 +6,81 @@ import java.util.*;
  * This util is used to check if an object is empty or not.
  * Empty means {@code null} or {@code isEmpty()}.
  *
- * @author liuxuanjie
+ * @author RomJe
  */
 public class EmptyUtil {
     /**
-     * @return Returns {@code true} if the integer array is {@code null} or {@code isEmpty()}.
+     * @return  Returns {@code true} if the byte array is {@code null} or {@code isEmpty()}.
+     */
+    public static boolean isEmpty(byte[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the byte array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static boolean nonEmpty(byte[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the short array is {@code null} or {@code isEmpty()}.
+     */
+    public static boolean isEmpty(short[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the short array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static boolean nonEmpty(short[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the char array is {@code null} or {@code isEmpty()}.
+     */
+    public static boolean isEmpty(char[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the char array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static boolean nonEmpty(char[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the float array is {@code null} or {@code isEmpty()}.
+     */
+    public static boolean isEmpty(float[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the float array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static boolean nonEmpty(float[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the double array is {@code null} or {@code isEmpty()}.
+     */
+    public static boolean isEmpty(double[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the double array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static boolean nonEmpty(double[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the integer array is {@code null} or {@code isEmpty()}.
      */
     public static boolean isEmpty(int[] array) {
         return Objects.isNull(array) || array.length == 0;
@@ -24,7 +94,7 @@ public class EmptyUtil {
     }
 
     /**
-     * @return Returns {@code true} if the long array is {@code null} or {@code isEmpty()}.
+     * @return  Returns {@code true} if the long array is {@code null} or {@code isEmpty()}.
      */
     public static boolean isEmpty(long[] array) {
         return Objects.isNull(array) || array.length == 0;
@@ -38,7 +108,21 @@ public class EmptyUtil {
     }
 
     /**
-     * @return Returns {@code true} if the string is {@code null} or {@code isEmpty()}.
+     * @return  Returns {@code true} if the object array is {@code null} or {@code isEmpty()}.
+     */
+    public static <T> boolean isEmpty(T[] array) {
+        return Objects.isNull(array) || array.length == 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the object array is not {@code null} and not {@code isEmpty()}.
+     */
+    public static <T> boolean nonEmpty(T[] array) {
+        return Objects.nonNull(array) && array.length > 0;
+    }
+
+    /**
+     * @return  Returns {@code true} if the string is {@code null} or {@code isEmpty()}.
      */
     public static boolean isEmpty(String str) {
         return Objects.isNull(str) || str.isEmpty();
@@ -52,7 +136,7 @@ public class EmptyUtil {
     }
 
     /**
-     * @return  @return Returns {@code true} if the collection is {@code null} or {@code isEmpty()}.
+     * @return  Returns {@code true} if the collection is {@code null} or {@code isEmpty()}.
      */
     public static <T> boolean isEmpty(Collection<T> collection) {
         return Objects.isNull(collection) || collection.isEmpty();
