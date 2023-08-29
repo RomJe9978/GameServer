@@ -132,4 +132,41 @@ public class RandomUtil {
         }
         return array[randomIntWithout(array.length)];
     }
+
+    /**
+     * 从指定的“概率列表”中随机命中一个概率
+     * <p>仅保证“概率和”在{@link Integer#MAX_VALUE}范围内的情况
+     * <p>所有概率取和后随机数，然后看随机数命中哪一个概率
+     * <p>注意，如果概率列表所有值全为“非正数”，那么认为所有概率全是0
+     * 此时，会直接按照等概率随机。如有特殊需求，不要调用该接口
+     *
+     * @param weightList 概率列表，允许概率为“非正数”，所有“非正数”概率按照“0”处理
+     * @return 正常返回命中概率在list中的的index。如果参数为Empty，返回-1，代表无效随机
+     */
+    public static int randomWeight(List<Integer> weightList) {
+        if (Objects.isNull(weightList) || weightList.isEmpty()) {
+            return -1;
+        }
+
+        // 不考虑累加越界
+        int sum = 0;
+        for (int i = 0, iSize = weightList.size(); i < iSize; i++) {
+            sum += Math.max(weightList.get(i), 0);
+        }
+
+        int randomValue = randomInt(1, sum);
+        for (int i = 0, iSize = weightList.size(); i < iSize; i++) {
+            int weight = weightList.get(i);
+            if (weight <= 0) {
+                continue;
+            }
+
+            randomValue -= weight;
+            if (randomValue <= 0) {
+                return i;
+            }
+        }
+        // 正常不会随不到，除非全是“非正数”，此时认为全是0，按概率一致处理
+        return randomIntWithout(weightList.size());
+    }
 }

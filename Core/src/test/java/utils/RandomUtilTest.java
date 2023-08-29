@@ -96,4 +96,17 @@ public class RandomUtilTest {
         System.out.println("count为list的长度:" + RandomUtil.selectUnique(list, 7));
         System.out.println("count为超过list的长度:" + RandomUtil.selectUnique(list, 9));
     }
+
+    /**
+     * {@link RandomUtil#randomWeight(List)}
+     */
+    @Test
+    public void testRandomWeight() {
+        System.out.println("list为null:" + RandomUtil.randomWeight(null));
+        System.out.println("list为empty：" + RandomUtil.randomWeight(Collections.emptyList()));
+        System.out.println("list为一个0：" + RandomUtil.randomWeight(Collections.singletonList(0)));
+        System.out.println("list为多个0：" + RandomUtil.randomWeight(Arrays.asList(0, -5, 0)));
+        System.out.println("list为多个正数：" + RandomUtil.randomWeight(Arrays.asList(10, 100, 200, 60, 30)));
+        System.out.println("list为正负零掺杂：" + RandomUtil.randomWeight(Arrays.asList(10, -100, -200, 60, 30)));
+    }
 }
