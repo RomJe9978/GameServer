@@ -5,96 +5,81 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  * @author RomJe
  */
 public class RandomUtilTest {
-
     /**
-     * {@link RandomUtil#randomInt(int)}
-     * <p>Test result when totalCount=1100，maxvalue=10：
-     * {0=90, 1=99, 2=107, 3=108, 4=86, 5=98, 6=93, 7=109, 8=94, 9=116, 10=100}
-     */
-    @Test
-    public void testRandomIntWithMax() {
-        int totalCount = 1100;
-        int maxValue = 10;
-
-        Map<Integer, Integer> randomMap = new HashMap<>();
-        for (int i = 0; i < totalCount; i++) {
-            int value = RandomUtil.randomInt(maxValue);
-            if (randomMap.containsKey(value)) {
-                int count = randomMap.get(value);
-                randomMap.put(value, count + 1);
-                continue;
-            }
-            randomMap.put(value, 1);
-        }
-
-        System.out.println(randomMap);
-    }
-
-    /**
-     * {@link RandomUtil#randomInt(int, int)}
-     * <p>Test result when totalCount=1100, minValue=1, maxvalue=10：
-     * {1=120, 2=100, 3=118, 4=98, 5=116, 6=113, 7=119, 8=105, 9=118, 10=93}
-     */
-    @Test
-    public void testRandomSide() {
-        int totalCount = 1100;
-        int minValue = 1;
-        int maxValue = 10;
-
-        Map<Integer, Integer> randomMap = new HashMap<>();
-        for (int i = 0; i < totalCount; i++) {
-            int value = RandomUtil.randomInt(minValue, maxValue);
-            if (randomMap.containsKey(value)) {
-                int count = randomMap.get(value);
-                randomMap.put(value, count + 1);
-                continue;
-            }
-            randomMap.put(value, 1);
-        }
-
-        System.out.println(randomMap);
-    }
-
-    /**
-     * {@link RandomUtil#hitProbability(int, int)}
-     */
-    @Test
-    public void testHitProbability() {
-        System.out.println("总概率为0，目标概率为0：" + RandomUtil.hitProbability(0, 0));
-        System.out.println("总概率为0，目标概率为5：" + RandomUtil.hitProbability(0, 5));
-        System.out.println("总概率为10，目标概率为0：" + RandomUtil.hitProbability(10, 0));
-
-        System.out.println("=========================================================");
-        for (int i = 0; i < 10; i++) {
-            System.out.println("总概率为10，目标概率为5：" + RandomUtil.hitProbability(10, 5));
-        }
-        System.out.println("=========================================================");
-
-        System.out.println("总概率为10，目标概率为10：" + RandomUtil.hitProbability(10, 10));
-        System.out.println("总概率为10，目标概率为15：" + RandomUtil.hitProbability(10, 15));
-    }
-
-    /**
-     * {@link RandomUtil#selectUnique(List, int)}
-     * <pre>数组为11, 22, 33, 44, 55, 66, 77，结果为：
-     * count为负数:[]
-     * count为0:[]
-     * count为list范围内正数:[11, 66, 55]
-     * count为list的长度:[22, 77, 55, 11, 44, 66, 33]
-     * count为超过list的长度:[]
+     * {@link RandomUtil#selectUnique(List, int, boolean)}
      */
     @Test
     public void testSelectUnique() {
-        List<Integer> list = Arrays.asList(11, 22, 33, 44, 55, 66, 77);
-        System.out.println("count为负数:" + RandomUtil.selectUnique(list, -1));
-        System.out.println("count为0:" + RandomUtil.selectUnique(list, 0));
-        System.out.println("count为list范围内正数:" + RandomUtil.selectUnique(list, 3));
-        System.out.println("count为list的长度:" + RandomUtil.selectUnique(list, 7));
-        System.out.println("count为超过list的长度:" + RandomUtil.selectUnique(list, 9));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, Integer.MIN_VALUE, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, -1, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, 0, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, 1, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, Integer.MAX_VALUE, false));
+
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, Integer.MIN_VALUE, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, -1, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, 0, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, 1, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(null, Integer.MAX_VALUE, true));
+
+        ArrayList<?> emptyList = new ArrayList<>();
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, Integer.MIN_VALUE, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, -1, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, 0, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, 1, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, Integer.MAX_VALUE, false));
+
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, Integer.MIN_VALUE, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, -1, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, 0, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, 1, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(emptyList, Integer.MAX_VALUE, true));
+
+        List<Integer> singleList = Collections.singletonList(1);
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, Integer.MIN_VALUE, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, -1, false));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, 0, false));
+        assertEquals(singleList.toString(), RandomUtil.selectUnique(singleList, 1, false).toString());
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, Integer.MAX_VALUE, false));
+
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, Integer.MIN_VALUE, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, -1, true));
+        assertEquals(Collections.emptyList(), RandomUtil.selectUnique(singleList, 0, true));
+        assertEquals(singleList.toString(), RandomUtil.selectUnique(singleList, 1, true).toString());
+        assertEquals(singleList.toString(), RandomUtil.selectUnique(singleList, Integer.MAX_VALUE, true).toString());
+
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), Integer.MIN_VALUE, false), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), -1, false), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 0, false), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 1, false), 1);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 3, false), 3);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 5, false), 5);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), Integer.MAX_VALUE, false), 0);
+
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), Integer.MIN_VALUE, true), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), -1, true), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 0, true), 0);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 1, true), 1);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 3, true), 3);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), 5, true), 5);
+        checkSizeAndUnique(RandomUtil.selectUnique(Arrays.asList(1, 4, 2, 3, 5), Integer.MAX_VALUE, true), 5);
+    }
+
+    public <T> void checkSizeAndUnique(List<T> result, int checkSize) {
+        assertNotEquals(null, result);
+        assertEquals(checkSize, result.size());
+
+        Set<T> existSet = new HashSet<>(result.size());
+        result.forEach(value -> {
+            assertFalse(existSet.contains(value));
+            existSet.add(value);
+        });
     }
 
     /**
@@ -102,11 +87,32 @@ public class RandomUtilTest {
      */
     @Test
     public void testRandomWeight() {
-        System.out.println("list为null:" + RandomUtil.randomWeight(null));
-        System.out.println("list为empty：" + RandomUtil.randomWeight(Collections.emptyList()));
-        System.out.println("list为一个0：" + RandomUtil.randomWeight(Collections.singletonList(0)));
-        System.out.println("list为多个0：" + RandomUtil.randomWeight(Arrays.asList(0, -5, 0)));
-        System.out.println("list为多个正数：" + RandomUtil.randomWeight(Arrays.asList(10, 100, 200, 60, 30)));
-        System.out.println("list为正负零掺杂：" + RandomUtil.randomWeight(Arrays.asList(10, -100, -200, 60, 30)));
+        assertEquals(-1, RandomUtil.randomWeight(null));
+        assertEquals(-1, RandomUtil.randomWeight(Collections.emptyList()));
+
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE)));
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(-1)));
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(0)));
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(1)));
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(Integer.MAX_VALUE)));
+
+        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(1, Integer.MIN_VALUE, 0, -1)));
+        assertEquals(1, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE, 1, 0, -1)));
+        assertEquals(2, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE, 0, 1, -1)));
+        assertEquals(3, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE, -1, 0, 1)));
+
+        checkBound(RandomUtil.randomWeight(Arrays.asList(10, 20, 10, 20)), 0, 3, null);
+        checkBound(RandomUtil.randomWeight(Arrays.asList(-1, 20, -1, 20)), 0, 3, Arrays.asList(0, 2));
+        checkBound(RandomUtil.randomWeight(Arrays.asList(-1, 20, 10, -1)), 0, 3, Arrays.asList(0, 3));
+        checkBound(RandomUtil.randomWeight(Arrays.asList(10, -1, -1, 20)), 0, 3, Arrays.asList(1, 2));
+        checkBound(RandomUtil.randomWeight(Arrays.asList(10, -1, 20, -1)), 0, 3, Arrays.asList(1, 3));
+        checkBound(RandomUtil.randomWeight(Arrays.asList(-1, -1, 20, 20)), 0, 3, Arrays.asList(0, 1));
+    }
+
+    public void checkBound(int value, int min, int max, List<Integer> excludeList) {
+        assertTrue(value >= min && value <= max);
+        if (Objects.nonNull(excludeList)) {
+            assertFalse(excludeList.contains(value));
+        }
     }
 }
