@@ -9,6 +9,11 @@ package com.romje.constants;
  */
 public class TimeConst {
     /**
+     * 每毫秒多少纳秒
+     */
+    public final static int NANOS_OF_MILLI = 1000 * 1000;
+
+    /**
      * 每秒多少毫秒
      */
     public final static int MILLIS_OF_SECOND = 1000;
