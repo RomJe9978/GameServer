@@ -1,4 +1,4 @@
-package com.romje.clear;
+package com.romje.component.clear;
 
 /**
  * "Clear"检查器

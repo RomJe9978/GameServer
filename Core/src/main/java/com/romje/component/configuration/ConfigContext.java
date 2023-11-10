@@ -1,4 +1,4 @@
-package com.romje.configuration;
+package com.romje.component.configuration;
 
 import org.apache.commons.configuration2.ImmutableConfiguration;
 

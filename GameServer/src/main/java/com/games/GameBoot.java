@@ -1,7 +1,7 @@
 package com.games;
 
 import com.games.context.GameContext;
-import com.games.log.GameLog;
+import com.games.log.GameLoggers;
 
 /**
  * @author romje
@@ -22,11 +22,11 @@ public class GameBoot {
         try {
             boolean bootResult = boot();
             if (!bootResult) {
-                GameLog.logic().error("Game server boot fail!");
+                GameLoggers.system().error("Game server boot fail!");
                 System.exit(-1);
             }
         } catch (Exception e) {
-            GameLog.logic().error("Game server boot fail!");
+            GameLoggers.system().error("Game server boot fail!");
             System.exit(-1);
         }
     }

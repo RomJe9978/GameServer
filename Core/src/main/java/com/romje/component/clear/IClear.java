@@ -1,4 +1,4 @@
-package com.romje.clear;
+package com.romje.component.clear;
 
 /**
  * “信息擦除”接口

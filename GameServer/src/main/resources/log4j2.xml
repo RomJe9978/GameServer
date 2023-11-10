@@ -47,7 +47,7 @@
                 <!--Size原则，超过指定大小后，产生新的文件-->
                 <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
             </Policies>
-            <!--max标识当前日志文件夹下滚动产生的最大文件个数，超出则覆盖之前文件，默认7-->
+            <!--max标识当前日志滚动产生的最大文件个数，超出则覆盖之前文件，默认7-->
             <DefaultRolloverStrategy max="16"/>
         </RollingRandomAccessFile>
 
@@ -73,11 +73,11 @@
             <appender-ref ref="ErrorAppender" level="error"/>
         </AsyncLogger>
 
-        <!--        <AsyncLogger name="CoreLog" additivity="false" includeLocation="true">-->
-        <!--            &lt;!&ndash;            <appender-ref ref="ConsoleAppender"/>&ndash;&gt;-->
-        <!--            &lt;!&ndash;            <appender-ref ref="StdoutAppender"/>&ndash;&gt;-->
-        <!--            <appender-ref ref="ErrorAppender" level="error"/>-->
-        <!--        </AsyncLogger>-->
+        <AsyncLogger name="CoreLog" additivity="false" includeLocation="true">
+            <appender-ref ref="ConsoleAppender"/>
+            <appender-ref ref="StdoutAppender"/>
+            <appender-ref ref="ErrorAppender" level="error"/>
+        </AsyncLogger>
 
         <!--root代表找不到具体logger后的默认logger，类似switch-case中的default-->
         <Root level="info" additivity="false" includeLocation="true">

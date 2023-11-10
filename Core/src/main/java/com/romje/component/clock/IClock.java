@@ -1,4 +1,4 @@
-package com.romje.clock;
+package com.romje.component.clock;
 
 import java.time.ZoneId;
 

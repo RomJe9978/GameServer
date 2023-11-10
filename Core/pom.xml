@@ -42,5 +42,12 @@
             <artifactId>snakeyaml</artifactId>
             <version>2.0</version>
         </dependency>
+
+        <!--字节码操作库-->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.29.2-GA</version>
+        </dependency>
     </dependencies>
 </project>

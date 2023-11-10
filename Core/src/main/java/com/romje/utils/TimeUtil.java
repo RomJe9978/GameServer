@@ -1,5 +1,8 @@
 package com.romje.utils;
 
+import com.romje.constants.DateConst;
+import com.romje.constants.StringConst;
+
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,16 +17,38 @@ import java.util.Objects;
  */
 public class TimeUtil {
     /**
+     * 时间戳转换成默认日期格式的字符串
+     * <p>默认格式为{@link DateConst#YYYY_MM_DD_SPACE_HH_MM_SS}
+     *
+     * @param millisTimestamp 时间戳（毫秒）
+     * @return {@link StringConst#BLANK_STRING} if params is invalid
+     */
+    public static String parseTime(long millisTimestamp) {
+        return parseTime(millisTimestamp, ZoneId.systemDefault(), DateConst.YYYY_MM_DD_SPACE_HH_MM_SS);
+    }
+
+    /**
+     * 时间戳转换成指定日期格式的字符串
+     *
+     * @param millisTimestamp 时间戳（毫秒）
+     * @param datePattern     时间格式，不允许为{@code null}
+     * @return {@link StringConst#BLANK_STRING} if params is invalid
+     */
+    public static String parseTime(long millisTimestamp, String datePattern) {
+        return parseTime(millisTimestamp, ZoneId.systemDefault(), datePattern);
+    }
+
+    /**
      * 时间戳转换成指定日期格式的字符串
      *
      * @param millisTimestamp 时间戳（毫秒）
      * @param zoneId          时区，不允许为{@code null}
      * @param datePattern     时间格式，不允许为{@code null}
-     * @return {@code null} if params is invalid
+     * @return {@link StringConst#BLANK_STRING} if params is invalid
      */
     public static String parseTime(long millisTimestamp, ZoneId zoneId, String datePattern) {
         if (Objects.isNull(zoneId) || Objects.isNull(datePattern)) {
-            return null;
+            return StringConst.BLANK_STRING;
         }
 
         try {
@@ -31,7 +56,7 @@ public class TimeUtil {
             LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
             return localDateTime.format(DateTimeFormatter.ofPattern(datePattern));
         } catch (Exception e) {
-            return null;
+            return StringConst.BLANK_STRING;
         }
     }
 
