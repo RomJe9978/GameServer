@@ -1,5 +1,6 @@
 package com.romje.component.log;
 
+import org.apache.logging.log4j.util.StackLocatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.Marker;
 
@@ -17,21 +18,27 @@ public class CustomizeLogger implements Logger {
     private Logger realLogger;
 
     /**
-     * 业务标识前缀
+     * 是否需要包含位置信息，默认需要
+     */
+    private boolean includeLocation;
+
+    /**
+     * 业务标识前缀,可以为{@code null}
      */
     private final String LOG_PREFIX;
 
-    private CustomizeLogger(Logger logger, String logPrefix) {
+    private CustomizeLogger(Logger logger, String logPrefix, boolean includeLocation) {
         Objects.requireNonNull(logger);
         this.realLogger = logger;
         this.LOG_PREFIX = logPrefix;
+        this.includeLocation = includeLocation;
     }
 
     /**
      * @return A new instance
      */
-    public static CustomizeLogger newInstance(Logger logger, String logPrefix) {
-        return new CustomizeLogger(logger, logPrefix);
+    public static CustomizeLogger newInstance(Logger logger, String logPrefix, boolean includeLocation) {
+        return new CustomizeLogger(logger, logPrefix, includeLocation);
     }
 
     /**
@@ -48,7 +55,46 @@ public class CustomizeLogger implements Logger {
      * 加工原始的日志message
      */
     private String processMsg(String msg) {
-        return LOG_PREFIX + msg;
+        StringBuilder result = new StringBuilder();
+        appendLocation(result);
+        appendPrefix(result);
+        result.append(msg);
+        return result.toString();
+    }
+
+    /**
+     * 添加位置信息
+     */
+    private void appendLocation(StringBuilder result) {
+        if (Objects.isNull(result)) {
+            return;
+        }
+
+        if (this.includeLocation) {
+            StackTraceElement stackTraceElement = StackLocatorUtil.calcLocation(this.getClass().getName());
+            if (Objects.nonNull(stackTraceElement)) {
+                result.append("(");
+                result.append(stackTraceElement.getFileName());
+                result.append(":");
+                result.append(stackTraceElement.getLineNumber());
+                result.append(")");
+                result.append(" - ");
+            }
+        }
+    }
+
+    /**
+     * 添加前缀信息
+     */
+    private void appendPrefix(StringBuilder result) {
+        if (Objects.isNull(result)) {
+            return;
+        }
+
+        if (Objects.nonNull(LOG_PREFIX)) {
+            result.append(LOG_PREFIX);
+            result.append(" ");
+        }
     }
 
     @Override

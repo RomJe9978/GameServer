@@ -9,7 +9,13 @@ import org.slf4j.Logger;
  */
 public class Loggers {
 
+    private final static Logger root = CustomizeLoggerFactory.newInstance("root", "[DEFAULT]");
+
     private final static Logger CORE = CustomizeLoggerFactory.newInstance("CoreLog", "[CORE]");
+
+    public static Logger root() {
+        return root;
+    }
 
     public static Logger core() {
         return CORE;
