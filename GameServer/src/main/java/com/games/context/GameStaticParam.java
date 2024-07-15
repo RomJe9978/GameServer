@@ -9,6 +9,7 @@ import java.util.List;
  * @author RomJe
  */
 public class GameStaticParam {
+
     /**
      * 游戏配置文件列表
      */

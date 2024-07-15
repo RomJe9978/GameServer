@@ -17,7 +17,7 @@
         <!--自研底层库Core的依赖-->
         <dependency>
             <groupId>com.romje</groupId>
-            <artifactId>Core</artifactId>
+            <artifactId>UniversalKit</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
@@ -86,4 +86,28 @@
             <version>1.27</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <properties>
+                <env>local</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/local</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
 </project>

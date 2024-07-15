@@ -1,0 +1,8 @@
+# 服务器配置
+server:
+  serverId: 3333
+  port: 8888
+  # 服务器时间相关
+  time:
+    # 服务器时间偏移量，分钟
+    offset: 60

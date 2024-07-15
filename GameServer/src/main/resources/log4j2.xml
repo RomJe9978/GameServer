@@ -15,7 +15,7 @@
     <Properties>
         <!--%d:显示日期 %t:线程名 %m:输出消息 %n:换行符 highlight用于设置日志颜色(idea中需要添加jvm参数-Dlog4j.skipJansi=false)-->
         <property name="LOG_PATTERN"
-                  value="%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %msg%n}{ERROR=RED,WARN=YELLOW,INFO=CYAN}"/>
+                  value="%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level (%F\:%L) %msg%n}{ERROR=RED,WARN=YELLOW,INFO=CYAN}"/>
         <!--日志文件编码格式-->
         <property name="CHARSET" value="UTF-8"/>
         <!--日志存储的目录文件夹 -->
@@ -66,6 +66,7 @@
     </Appenders>
 
     <Loggers>
+        <!-- 线上版本将includeLocation关闭，该步骤会递归反射调用栈 -->
         <AsyncLogger name="LogicLog" additivity="false" includeLocation="true">
             <appender-ref ref="ConsoleAppender"/>
             <appender-ref ref="StdoutAppender"/>

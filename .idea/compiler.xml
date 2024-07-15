@@ -10,7 +10,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="GameServer" />
-        <module name="Core" />
+        <module name="UniversalKit" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8" />

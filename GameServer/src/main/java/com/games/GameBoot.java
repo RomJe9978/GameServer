@@ -7,6 +7,7 @@ import com.games.log.GameLoggers;
  * @author romje
  */
 public class GameBoot {
+
     /**
      * 启动服务器，启动过程
      *
@@ -25,6 +26,8 @@ public class GameBoot {
                 GameLoggers.system().error("Game server boot fail!");
                 System.exit(-1);
             }
+
+            GameLoggers.system().info("[GameBoot] Server boot success!");
         } catch (Exception e) {
             GameLoggers.system().error("Game server boot fail!");
             System.exit(-1);
