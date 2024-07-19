@@ -1,11 +1,9 @@
 package com.romje.component.clock;
 
-import java.time.ZoneId;
-
 /**
  * 时钟接口
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public interface IClock {
 

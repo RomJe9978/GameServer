@@ -4,8 +4,9 @@ package com.romje.constants;
  * 时间单位转换的相关常量定义
  * <p>避免程序中出现大量的“魔数”，减少出错概率
  * <p>命名格式统一，“每天有多少小时”为{@link #HOURS_OF_DAY}
+ * <P>注意{@link Integer#MAX_VALUE}常量数值是否越界
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class TimeConst {
 

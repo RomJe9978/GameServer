@@ -6,7 +6,7 @@ import java.util.*;
  * This util is used to check if an object is empty or not.
  * Empty means {@code null} or {@code isEmpty()}.
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class EmptyUtil {
 

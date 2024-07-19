@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author RomJe
+ * @author liu xuan jie
  */
 public class MathUtilTest {
 

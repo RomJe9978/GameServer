@@ -8,7 +8,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * @author RomJe
+ * @author liu xuan jie
  */
 public class RandomUtilTest {
 
@@ -91,11 +91,11 @@ public class RandomUtilTest {
         assertEquals(-1, RandomUtil.randomWeight(null));
         assertEquals(-1, RandomUtil.randomWeight(Collections.emptyList()));
 
-        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE)));
-        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(-1)));
-        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(0)));
-        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(1)));
-        assertEquals(0, RandomUtil.randomWeight(Arrays.asList(Integer.MAX_VALUE)));
+        assertEquals(0, RandomUtil.randomWeight(List.of(Integer.MIN_VALUE)));
+        assertEquals(0, RandomUtil.randomWeight(List.of(-1)));
+        assertEquals(0, RandomUtil.randomWeight(List.of(0)));
+        assertEquals(0, RandomUtil.randomWeight(List.of(1)));
+        assertEquals(0, RandomUtil.randomWeight(List.of(Integer.MAX_VALUE)));
 
         assertEquals(0, RandomUtil.randomWeight(Arrays.asList(1, Integer.MIN_VALUE, 0, -1)));
         assertEquals(1, RandomUtil.randomWeight(Arrays.asList(Integer.MIN_VALUE, 1, 0, -1)));

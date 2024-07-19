@@ -3,7 +3,7 @@ package com.romje.constants;
 /**
  * 字符串常量
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class StringConst {
 

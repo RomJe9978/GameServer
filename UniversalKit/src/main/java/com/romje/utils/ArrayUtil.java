@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 数组操作的工具类
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class ArrayUtil {
 

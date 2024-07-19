@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * 集合相关工具类
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class CollectionUtil {
 

@@ -27,7 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * “绝对意义”上的“完全公平等概率不可控随机”，所以此处自定义了JDK的部分接口，组
  * 合了部分常用“随机方法”，以满足基本业务场景的使用。
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class RandomUtil {
 

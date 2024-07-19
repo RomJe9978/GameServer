@@ -1,4 +1,4 @@
-package com.romje.component.log;
+package com.games.framework.log;
 
 import org.slf4j.Logger;
 

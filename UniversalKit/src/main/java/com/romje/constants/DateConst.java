@@ -3,7 +3,7 @@ package com.romje.constants;
 /**
  * 日期相关常量
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class DateConst {
 

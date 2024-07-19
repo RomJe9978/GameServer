@@ -1,4 +1,4 @@
-package com.romje.component.log;
+package com.games.framework.log;
 
 import com.romje.utils.EmptyUtil;
 import org.apache.logging.log4j.LogManager;

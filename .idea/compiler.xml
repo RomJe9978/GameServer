@@ -11,6 +11,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="GameServer" />
         <module name="UniversalKit" />
+        <module name="Framework" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8" />

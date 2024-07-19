@@ -1,19 +1,12 @@
 package com.games.context;
 
+import com.games.framework.configuration.ConfigContext;
+import com.games.framework.configuration.PriorityPropertyProxy;
 import com.games.log.GameLoggers;
 import com.romje.component.clock.ClockContext;
-import com.romje.component.clock.DefaultClock;
-import com.romje.component.configuration.ConfigContext;
-import com.romje.component.configuration.PriorityPropertyProxy;
+import com.romje.component.clock.OffsetClock;
 import com.romje.constants.TimeConst;
-import com.romje.utils.EmptyUtil;
-import com.romje.utils.TimeUtil;
-import org.apache.commons.configuration2.YAMLConfiguration;
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
+import com.romje.utils.DateUtil;
 
 /**
  * 游戏全局上下文容器
@@ -60,11 +53,11 @@ public class GameContext {
         GameLoggers.system().info("[Clock] Game config time offset minutes is:{}", configOffset);
 
         long millis = Math.multiplyExact(configOffset, TimeConst.MILLIS_OF_MINUTE);
-        ClockContext.setClock(DefaultClock.newInstance(millis));
+        ClockContext.setClock(OffsetClock.newInstance(millis));
         GameLoggers.system().info("[Clock] Init clock finish: {}!", ClockContext.getClock());
 
         long curTime = ClockContext.getClock().currentTimeMillis();
-        GameLoggers.system().info("[Clock] Init clock finish,cur clock time:{}", TimeUtil.parseTime(curTime));
+        GameLoggers.system().info("[Clock] Init clock finish,cur clock time:{}", DateUtil.parseDate(curTime));
         return true;
     }
 }

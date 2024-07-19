@@ -3,7 +3,7 @@ package com.romje.utils;
 /**
  * This util is used to handle math calculation.
  *
- * @author RomJe
+ * @author liu xuan jie
  */
 public class MathUtil {
 
