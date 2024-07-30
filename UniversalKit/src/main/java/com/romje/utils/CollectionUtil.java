@@ -1,13 +1,19 @@
 package com.romje.utils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 集合相关工具类
  *
  * @author liu xuan jie
  */
-public class CollectionUtil {
+public final class CollectionUtil {
+
+    private CollectionUtil() {
+    }
 
     /**
      * 集合的长度是否等于指定值

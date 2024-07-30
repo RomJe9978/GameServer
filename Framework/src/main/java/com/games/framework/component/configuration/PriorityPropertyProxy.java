@@ -1,4 +1,4 @@
-package com.games.framework.configuration;
+package com.games.framework.component.configuration;
 
 import com.romje.utils.EmptyUtil;
 import org.apache.commons.configuration2.ConfigurationDecoder;

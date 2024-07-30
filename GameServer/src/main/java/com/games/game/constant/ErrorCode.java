@@ -1,8 +1,7 @@
 package com.games.game.constant;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import com.romje.component.manager.enummanage.EnumKey;
+import lombok.Getter;
 
 /**
  * 统一管理游戏内错误码
@@ -16,45 +15,28 @@ import java.util.Objects;
  *
  * @author liu xuan jie
  */
+@Getter
 public enum ErrorCode {
 
     /**
      * 系统错误码【0，1000】
      */
-    NON_ERROR(0, "non error"),
-    COMMON_ERROR(1, "common error"),
+    NON_ERROR(0, "没有错误"),
+    COMMON_ERROR(1, "通用错误"),
     PARAM_INVALID(2, "参数无效"),
     ;
 
     /**
      * 错误码
      */
+    @EnumKey
     private final int code;
 
     /**
-     * 错误码简单描述文本
-     * 不允许为{@code null}，减少使用处的空指针检查
+     * 错误码简单描述文本，不允许为{@code null}，减少使用处的空指针检查
      * 如果没有描述，请使用{@link com.romje.constants.StringConst#BLANK_STRING}
      */
     private final String describe;
-
-    // todo:后续迁移出去，做成统一工具，不然每次都要实现
-    private static final Map<Integer, ErrorCode> codeMap;
-
-    static {
-        ErrorCode[] codes = ErrorCode.values();
-        codeMap = new HashMap<>(codes.length);
-        for (ErrorCode errorCode : codes) {
-            if (errorCode.code < 0 || Objects.isNull(errorCode.describe)) {
-                throw new IllegalArgumentException("非法的错误码：" + errorCode.code + "，" + errorCode.describe);
-            }
-
-            ErrorCode oldValue = codeMap.put(errorCode.code, errorCode);
-            if (Objects.nonNull(oldValue)) {
-                throw new IllegalArgumentException("重复的错误码：" + oldValue + "，" + errorCode);
-            }
-        }
-    }
 
     ErrorCode(int code, String describe) {
         this.code = code;
@@ -75,12 +57,5 @@ public enum ErrorCode {
 
     public static boolean nonError(int code) {
         return code == NON_ERROR.code;
-    }
-
-    /**
-     * @return 当code不存在时，返回通用错误，不会为{@code null}
-     */
-    public static ErrorCode valueOf(int code) {
-        return codeMap.getOrDefault(code, COMMON_ERROR);
     }
 }

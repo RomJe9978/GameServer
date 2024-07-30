@@ -1,8 +1,8 @@
 package com.games.context;
 
-import com.games.framework.configuration.ConfigContext;
-import com.games.framework.configuration.PriorityPropertyProxy;
-import com.games.log.GameLoggers;
+import com.games.framework.component.configuration.ConfigContext;
+import com.games.framework.component.configuration.PriorityPropertyProxy;
+import com.games.log.Log;
 import com.romje.component.clock.ClockContext;
 import com.romje.component.clock.OffsetClock;
 import com.romje.constants.TimeConst;
@@ -33,7 +33,7 @@ public class GameContext {
      * @return {@code false} if occurs error or exception
      */
     public boolean initDefault() {
-        GameLoggers.system().info("[GameContext] Init default start do!");
+        Log.LOGIC.info("[GameContext] Init default start do!");
 
         PriorityPropertyProxy propertyProxy = PriorityPropertyProxy.newInstance();
         boolean result = propertyProxy.initConfig(GameStaticParam.listConfigFileName());
@@ -41,23 +41,23 @@ public class GameContext {
 
         result &= initClock();
 
-        GameLoggers.system().info("[GameContext] Server ip:{}, port:{}", ConfigContext.getConfiguration().getLong("server.serverId"), ConfigContext.getConfiguration().getLong("server.port"));
+        Log.LOGIC.info("[GameContext] Server ip:{}, port:{}", ConfigContext.getConfiguration().getLong("server.serverId"), ConfigContext.getConfiguration().getLong("server.port"));
         return result;
     }
 
     private boolean initClock() {
-        GameLoggers.system().info("[Clock] Init game clock start!");
+        Log.LOGIC.info("[Clock] Init game clock start!");
 
         // todo:用枚举常量去优化，不要每次都去读取key
         long configOffset = ConfigContext.getConfiguration().getLong("server.time.offset", 0L);
-        GameLoggers.system().info("[Clock] Game config time offset minutes is:{}", configOffset);
+        Log.LOGIC.info("[Clock] Game config time offset minutes is:{}", configOffset);
 
         long millis = Math.multiplyExact(configOffset, TimeConst.MILLIS_OF_MINUTE);
         ClockContext.setClock(OffsetClock.newInstance(millis));
-        GameLoggers.system().info("[Clock] Init clock finish: {}!", ClockContext.getClock());
+        Log.LOGIC.info("[Clock] Init clock finish: {}!", ClockContext.getClock());
 
         long curTime = ClockContext.getClock().currentTimeMillis();
-        GameLoggers.system().info("[Clock] Init clock finish,cur clock time:{}", DateUtil.parseDate(curTime));
+        Log.LOGIC.info("[Clock] Init clock finish,cur clock time:{}", DateUtil.parseDate(curTime));
         return true;
     }
 }

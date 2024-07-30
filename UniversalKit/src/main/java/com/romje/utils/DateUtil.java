@@ -15,7 +15,10 @@ import java.util.Objects;
  *
  * @author liu xuan jie
  */
-public class DateUtil {
+public final class DateUtil {
+
+    private DateUtil() {
+    }
 
     /**
      * 时间戳转换成默认日期格式的字符串

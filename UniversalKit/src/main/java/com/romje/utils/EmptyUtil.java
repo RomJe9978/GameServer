@@ -1,6 +1,8 @@
 package com.romje.utils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This util is used to check if an object is empty or not.
@@ -8,7 +10,10 @@ import java.util.*;
  *
  * @author liu xuan jie
  */
-public class EmptyUtil {
+public final class EmptyUtil {
+
+    private EmptyUtil() {
+    }
 
     /**
      * @return Returns {@code true} if the byte array is {@code null} or {@code isEmpty()}.

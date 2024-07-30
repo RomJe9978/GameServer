@@ -14,10 +14,10 @@
     </properties>
 
     <dependencies>
-        <!--自研底层库Core的依赖-->
+        <!--自定义框架层的依赖-->
         <dependency>
-            <groupId>com.romje</groupId>
-            <artifactId>UniversalKit</artifactId>
+            <groupId>com.framework</groupId>
+            <artifactId>Framework</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

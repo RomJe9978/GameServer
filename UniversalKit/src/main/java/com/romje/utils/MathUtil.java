@@ -5,7 +5,10 @@ package com.romje.utils;
  *
  * @author liu xuan jie
  */
-public class MathUtil {
+public final class MathUtil {
+
+    private MathUtil() {
+    }
 
     /**
      * 指定{@code value}是否在指定范围[min, max]内
@@ -90,10 +93,15 @@ public class MathUtil {
     }
 
     /**
-     * 计算"最接近且不小于"某个给定数的2的次幂
+     * 计算大于等于给定值的最小2的幂次方数
+     *
      * <p>如果给定值本身就是2的次幂，直接返回原值
      * <p>如果给定值是“非正数”，则返回固定结果{@code 1}
      * <p>当计算结果超出整型的最大范围时，会抛出数据异常
+     * <pre>
+     *     input: -1,0,1,2,3,15,16,17
+     *     output: 1,1,1,2,4,16,16,32
+     * </pre>
      *
      * @param value 当大于"2^30"时，会有越界发生
      * @return 最接近且不小于给定值的2的次幂

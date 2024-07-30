@@ -7,21 +7,35 @@
     4. All async logger性能更优秀，在64线程以上大机器上表现更为优异。
     5. Mixed loggers性能稍逊于All async logger()，但配置更为灵活。
     该配置文件采用Async Logger方式，选型为Mixed loggers！
- -->
+-->
+<!--
+    业务配置需要关注的点总结：
+    1.基础配置，“编码方式”，“日志文件输出文件夹”，“日志文件夹是否多级目录”。
+    2.日志滚动策略，“多久产生一个新的日志文件”，“每一个日志文件最大容量限制”，“最大滚动限制”。
+    3.文件删除策略，“是否需要指定删除多久之前的日志文件（配合运维备份）”。
+-->
 
 <!-- status用来指定log4j本身的打印日志的级别 -->
 <!-- monitorInterval用于指定log4j自动重新配置的监测间隔时间，单位是s,默认是0不检测 -->
 <Configuration status="info" monitorInterval="0">
     <Properties>
-        <!--%d:显示日期 %t:线程名 %m:输出消息 %n:换行符 highlight用于设置日志颜色(idea中需要添加jvm参数-Dlog4j.skipJansi=false)-->
+        <!--%d:显示日期 %t:线程名 %m:输出消息 %n:换行符 highlight用于设置日志颜色-->
+        <!--idea中需要添加jvm参数"-Dlog4j.skipJansi=false"-->
+        <property name="COLOR" value="{ERROR=RED,WARN=YELLOW,INFO=CYAN}"/>
         <property name="LOG_PATTERN"
-                  value="%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level (%F\:%L) %msg%n}{ERROR=RED,WARN=YELLOW,INFO=CYAN}"/>
+                  value="%highlight{%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level (%F\:%L) %msg%n}${COLOR}"/>
         <!--日志文件编码格式-->
         <property name="CHARSET" value="UTF-8"/>
         <!--日志存储的目录文件夹 -->
         <property name="LOG_DIR" value="logs"/>
         <!--约定文件拆分大小-->
         <property name="MAX_FILE_SIZE" value="128MB"/>
+        <!--约定时间滚动间隔：小时-->
+        <property name="ROLLING_TIME" value="1"/>
+        <!--约定最大滚动数量，一个滚动单元内超过数量会覆盖最早的，不配置默认为7-->
+        <property name="MAX_ROLLOVER_COUNT" value="16"/>
+        <!--日志删除策略-->
+        <property name="MAX_SAVE_TIME" value="14d"/>
     </Properties>
 
     <Appenders>
@@ -43,12 +57,17 @@
             <Policies>
                 <!--文件滚动原则，可以同时配置组合-->
                 <!--时间原则，超过interval之后，产生新的文件，单位小时-->
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy interval="${ROLLING_TIME}" modulate="true"/>
                 <!--Size原则，超过指定大小后，产生新的文件-->
                 <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
             </Policies>
             <!--max标识当前日志滚动产生的最大文件个数，超出则覆盖之前文件，默认7-->
-            <DefaultRolloverStrategy max="16"/>
+            <DefaultRolloverStrategy max="${MAX_ROLLOVER_COUNT}">
+                <Delete basePath="${LOG_DIR}/stdout/">
+                    <IfFileName glob="stdout.log.*"/>
+                    <IfLastModified age="${MAX_SAVE_TIME}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingRandomAccessFile>
 
         <!--所有error日志统一额外处理到指定文件下-->
@@ -58,29 +77,35 @@
                                  immediateFlush="true">
             <PatternLayout charset="${CHARSET}" pattern="${LOG_PATTERN}"/>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy interval="${ROLLING_TIME}" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="${MAX_FILE_SIZE}"/>
             </Policies>
-            <DefaultRolloverStrategy max="16"/>
+            <DefaultRolloverStrategy max="${MAX_ROLLOVER_COUNT}">
+                <Delete basePath="${LOG_DIR}/error/">
+                    <IfFileName glob="error.log.*"/>
+                    <IfLastModified age="${MAX_SAVE_TIME}"/>
+                </Delete>
+            </DefaultRolloverStrategy>
         </RollingRandomAccessFile>
     </Appenders>
 
     <Loggers>
         <!-- 线上版本将includeLocation关闭，该步骤会递归反射调用栈 -->
+        <!-- additivity这个配置代表是否继承父类的Appender的配置，false为不继承 -->
         <AsyncLogger name="LogicLog" additivity="false" includeLocation="true">
             <appender-ref ref="ConsoleAppender"/>
             <appender-ref ref="StdoutAppender"/>
             <appender-ref ref="ErrorAppender" level="error"/>
         </AsyncLogger>
 
-        <AsyncLogger name="CoreLog" additivity="false" includeLocation="ture">
+        <AsyncLogger name="CoreLog" additivity="false" includeLocation="true">
             <appender-ref ref="ConsoleAppender"/>
             <appender-ref ref="StdoutAppender"/>
             <appender-ref ref="ErrorAppender" level="error"/>
         </AsyncLogger>
 
-        <!--root代表找不到具体logger后的默认logger，类似switch-case中的default-->
-        <Root level="info" additivity="false" includeLocation="false">
+        <!--root是所有logger的默认父级，如果指定logger没有配置，则会直接继承使用root的配置-->
+        <Root level="info" includeLocation="true">
             <appender-ref ref="ConsoleAppender"/>
             <appender-ref ref="StdoutAppender"/>
             <appender-ref ref="ErrorAppender" level="error"/>

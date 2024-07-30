@@ -1,6 +1,9 @@
 package com.romje.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -29,14 +32,17 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author liu xuan jie
  */
-public class RandomUtil {
+public final class RandomUtil {
+
+    private RandomUtil() {
+    }
 
     /**
      * 随机{@code int}范围内的“非负数”
      *
      * @return Returns {@code 0 <= result <= Integer.MaxValue}
      */
-    protected static int randomIntNonNegative() {
+    private static int randomIntNonNegative() {
         int value = ThreadLocalRandom.current().nextInt();
         return value == Integer.MIN_VALUE ? 0 : Math.abs(value);
     }
@@ -186,9 +192,9 @@ public class RandomUtil {
         }
 
         long sum = 0L;
-        for (int i = 0, iSize = weightList.size(); i < iSize; i++) {
+        for (Integer integer : weightList) {
             // 考虑累加越界,抛出异常
-            sum = Math.addExact(sum, Math.max(weightList.get(i), 0));
+            sum = Math.addExact(sum, Math.max(integer, 0));
         }
 
         // 全是“非正数”，此时认为全是0，按概率一致处理

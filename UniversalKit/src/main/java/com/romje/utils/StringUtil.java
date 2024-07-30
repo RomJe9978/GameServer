@@ -5,5 +5,8 @@ package com.romje.utils;
  *
  * @author liu xuan jie
  */
-public class StringUtil {
+public final class StringUtil {
+
+    private StringUtil() {
+    }
 }

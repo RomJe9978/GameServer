@@ -15,25 +15,12 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
-    <!--统一所有依赖的版本管理,仅仅只是版本管理，该项不会产生实际依赖-->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.romje</groupId>
-                <artifactId>Dependency</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <!--实际的依赖包，版本信息请配置在dependencyManagement-->
     <dependencies>
         <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

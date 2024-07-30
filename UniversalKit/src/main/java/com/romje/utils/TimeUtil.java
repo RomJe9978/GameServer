@@ -7,7 +7,7 @@ import com.romje.constants.TimeConst;
  *
  * @author liu xuan jie
  */
-public class TimeUtil {
+public final class TimeUtil {
 
     private TimeUtil() {
     }

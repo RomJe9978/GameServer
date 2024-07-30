@@ -1,13 +1,19 @@
 package com.romje.utils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 数组操作的工具类
  *
  * @author liu xuan jie
  */
-public class ArrayUtil {
+public final class ArrayUtil {
+
+    private ArrayUtil() {
+    }
 
     /**
      * 获取Array中指定位置的元素

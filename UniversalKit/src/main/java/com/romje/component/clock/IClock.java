@@ -31,7 +31,7 @@ public interface IClock {
     /**
      * 获取时钟的“当前纳秒时间戳”
      *
-     * @return 时间戳（毫秒）
+     * @return 时间戳（纳秒）
      */
     long nanoTime();
 }
