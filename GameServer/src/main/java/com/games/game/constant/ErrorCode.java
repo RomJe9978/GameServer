@@ -1,6 +1,6 @@
 package com.games.game.constant;
 
-import com.romje.component.manager.enummanage.EnumKey;
+import com.romje.component.proxy.enumproxy.EnumKey;
 import lombok.Getter;
 
 /**

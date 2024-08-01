@@ -6,9 +6,9 @@ import com.games.game.component.LoggerRepository;
 import com.games.log.Log;
 import com.romje.component.checker.constcheck.ConstChecker;
 import com.romje.component.checker.constcheck.ConstUnique;
+import com.romje.component.checker.enumcheck.EnumChecker;
 import com.romje.component.checker.enumcheck.EnumUnique;
-import com.romje.component.manager.enummanage.EnumKey;
-import com.romje.component.manager.enummanage.EnumManager;
+import com.romje.component.proxy.enumproxy.EnumProxy;
 import com.romje.model.BoolResult;
 
 import java.lang.reflect.InvocationTargetException;
@@ -45,7 +45,7 @@ public final class Bootstrapper {
                 ScanUtil.scanEnumsAsList(BootParameters.SCAN_ENUM_MANAGE_PACKAGE_NAME);
 
         try {
-            BoolResult boolResult = EnumManager.INSTANCE.registerEnums(enumClassList, EnumKey.class);
+            BoolResult boolResult = EnumProxy.INSTANCE.registerEnums(enumClassList);
             if (boolResult.isFail()) {
                 Log.LOGIC.error("[Boot] Register enum manage fail:{}!", boolResult.message());
                 return false;
@@ -64,7 +64,7 @@ public final class Bootstrapper {
                 ScanUtil.scanEnumsAsList(BootParameters.ENUM_CHECKED_PACKAGE_NAME);
 
         try {
-            BoolResult boolResult = EnumManager.INSTANCE.registerEnums(enumClassList, EnumUnique.class);
+            BoolResult boolResult = EnumChecker.checkFieldUnique(enumClassList, EnumUnique.class);
             if (boolResult.isFail()) {
                 Log.LOGIC.error("[Boot] Check enum field repeat fail:{}!", boolResult.message());
                 return false;
