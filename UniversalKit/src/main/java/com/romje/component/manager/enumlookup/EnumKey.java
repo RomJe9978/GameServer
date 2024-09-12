@@ -1,4 +1,4 @@
-package com.romje.component.proxy.enumproxy;
+package com.romje.component.manager.enumlookup;
 
 import java.lang.annotation.*;
 
@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * <pre>
  *     1.可以根据枚举对应字段的value值映射唯一的枚举实例。
  *     2.可以查重，所有枚举实例的标识{@code key}的字段值不允许重复。
- *     3.配合{@link EnumProxy}使用，暂时仅支持一个字段作为枚举键。
+ *     3.配合{@link EnumLookup}使用，暂时仅支持一个字段作为枚举键。
  * </pre>
  *
  * @author liu xuan jie

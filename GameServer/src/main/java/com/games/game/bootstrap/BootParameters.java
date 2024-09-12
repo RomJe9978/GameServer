@@ -38,4 +38,9 @@ public final class BootParameters {
      * 日志配置文件名称
      */
     public static final String LOG_CONFIG_FILE_NAME = "log4j2.xml";
+
+    /**
+     * “事件监听者”，需要扫描的包名
+     */
+    public static final String SCAN_EVENT_LISTENER_PACKAGE_NAME = "com.games";
 }

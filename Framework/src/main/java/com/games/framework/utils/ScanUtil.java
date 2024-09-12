@@ -22,6 +22,35 @@ public class ScanUtil {
     }
 
     /**
+     * {@link #scanClassesAsSet(String)}。
+     *
+     * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}。
+     */
+    public static List<Class<?>> scanClassesAsList(String packageName) {
+        Set<Class<?>> classSet = scanClassesAsSet(packageName);
+        return EmptyUtil.nonEmpty(classSet) ? new ArrayList<>(classSet) : Collections.emptyList();
+    }
+
+    /**
+     * 扫描指定包下的所有{@link Class},相当于扫描{@link Object}的所有子类。
+     *
+     * @param packageName 指定包名，不允许为{@code null}和{@code empty}
+     * @return 任何错误返回{@code Collections.emptySet()}，不会为{@code null}
+     */
+    public static Set<Class<?>> scanClassesAsSet(String packageName) {
+        if (EmptyUtil.isEmpty(packageName)) {
+            return Collections.emptySet();
+        }
+
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.setUrls(ClasspathHelper.forPackage(packageName));
+        configurationBuilder.setScanners(Scanners.SubTypes);
+
+        Reflections reflections = new Reflections(configurationBuilder);
+        return reflections.getSubTypesOf(Object.class);
+    }
+
+    /**
      * {@link #scanAnnotationAsSet(String, Class)}
      *
      * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}

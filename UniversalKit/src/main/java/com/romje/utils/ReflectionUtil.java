@@ -25,7 +25,8 @@ public final class ReflectionUtil {
     }
 
     /**
-     * 获取指定类中使用了指定注解的所有字段。
+     * 获取指定类中使用了指定注解的所有字段（不包括继承的字段）。
+     * <p>内部使用{@link Class#getDeclaredFields()}来首先获取所有字段。
      *
      * @param clazz           要检查的类。
      * @param annotationClazz 注解的类型。
@@ -39,6 +40,24 @@ public final class ReflectionUtil {
             }
         }
         return annotatedFields;
+    }
+
+    /**
+     * 获取指定类中使用了指定注解的所有方法（不包括继承的方法）。
+     * <p>内部使用{@link Class#getDeclaredMethods()}来首先获取所有方法。
+     *
+     * @param clazz           要检查的类。
+     * @param annotationClazz 注解的类型。
+     * @return 包含使用了指定注解的所有方法的列表。不会为{@code null}
+     */
+    public static List<Method> getMethodsWithAnnotation(Class<?> clazz, Class<? extends Annotation> annotationClazz) {
+        List<Method> annotatedMethods = new ArrayList<>();
+        for (Method method : clazz.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(annotationClazz)) {
+                annotatedMethods.add(method);
+            }
+        }
+        return annotatedMethods;
     }
 
     /**
@@ -69,5 +88,27 @@ public final class ReflectionUtil {
         Objects.requireNonNull(field);
         int modifier = field.getModifiers();
         return Modifier.isStatic(modifier) && Modifier.isFinal(modifier);
+    }
+
+    /**
+     * 检查指定方法是否为静态方法，{@code static}修饰
+     *
+     * @param method 不允许为{@code null}
+     * @return 如果是“静态方法”，返回{@code true}
+     */
+    public static boolean isStaticMethod(Method method) {
+        Objects.requireNonNull(method);
+        int modifier = method.getModifiers();
+        return Modifier.isStatic(modifier);
+    }
+
+    /**
+     * 检查指定方法是否为非静态方法，没有{@code static}修饰
+     *
+     * @param method 不允许为{@code null}
+     * @return 如果是“非静态方法”，返回{@code ture}
+     */
+    public static boolean nonStaticMethod(Method method) {
+        return !isStaticMethod(method);
     }
 }

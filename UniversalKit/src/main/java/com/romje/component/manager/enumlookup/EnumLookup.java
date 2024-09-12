@@ -1,4 +1,4 @@
-package com.romje.component.proxy.enumproxy;
+package com.romje.component.manager.enumlookup;
 
 import com.romje.constants.StringConst;
 import com.romje.model.BoolResult;
@@ -10,8 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
- * “枚举类统一管理”的代理类，单例
- * 该类对枚举常见操作做统一代理管理，避免每次手写一个枚举类的时候都对重复逻辑重新编写
+ * “枚举实例”的映射查询类，单例
  *
  * <p>枚举中通常会有根据某一个成员变量值反查枚举，最简单的做法是使用{@code values()}
  * 获取枚举实例列表，遍历与“指定成员值”进行对比，从而返回。而每次调用{@code values()}
@@ -25,7 +24,7 @@ import java.util.*;
  *
  * @author liu xuan jie
  */
-public enum EnumProxy {
+public enum EnumLookup {
 
     /**
      * 单例

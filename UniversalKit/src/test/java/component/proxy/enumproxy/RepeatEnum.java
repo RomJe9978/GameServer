@@ -1,6 +1,6 @@
 package component.proxy.enumproxy;
 
-import com.romje.component.proxy.enumproxy.EnumKey;
+import com.romje.component.manager.enumlookup.EnumKey;
 
 /**
  * @author liu xuan jie

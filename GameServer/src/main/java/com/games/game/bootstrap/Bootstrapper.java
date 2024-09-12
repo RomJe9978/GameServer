@@ -1,5 +1,6 @@
 package com.games.game.bootstrap;
 
+import com.games.framework.component.eventkit.EventDispatcher;
 import com.games.framework.utils.ScanUtil;
 import com.games.game.component.Log4j2LoggerChecker;
 import com.games.game.component.LoggerRepository;
@@ -8,7 +9,7 @@ import com.romje.component.checker.constcheck.ConstChecker;
 import com.romje.component.checker.constcheck.ConstUnique;
 import com.romje.component.checker.enumcheck.EnumChecker;
 import com.romje.component.checker.enumcheck.EnumUnique;
-import com.romje.component.proxy.enumproxy.EnumProxy;
+import com.romje.component.manager.enumlookup.EnumLookup;
 import com.romje.model.BoolResult;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,6 +32,14 @@ public final class Bootstrapper {
         exitOnFail(checkConstFieldRepeat(), 1);
         exitOnFail(checkLoggerConfig(), 1);
 
+        // todo:
+        exitOnFail(registerEventListener(), 1);
+        EventDispatcher.INSTANCE.publish(123);
+        EventDispatcher.INSTANCE.publish("测试是否可以使用");
+        EventDispatcher.INSTANCE.publish(new Object());
+        EventDispatcher.INSTANCE.publish(new Test());
+        EventDispatcher.INSTANCE.publish(new Bootstrapper());
+
         Log.LOGIC.info("[Boot] Check jod is finish!");
     }
 
@@ -45,7 +54,7 @@ public final class Bootstrapper {
                 ScanUtil.scanEnumsAsList(BootParameters.SCAN_ENUM_MANAGE_PACKAGE_NAME);
 
         try {
-            BoolResult boolResult = EnumProxy.INSTANCE.registerEnums(enumClassList);
+            BoolResult boolResult = EnumLookup.INSTANCE.registerEnums(enumClassList);
             if (boolResult.isFail()) {
                 Log.LOGIC.error("[Boot] Register enum manage fail:{}!", boolResult.message());
                 return false;
@@ -109,6 +118,12 @@ public final class Bootstrapper {
         }
 
         Log.LOGIC.info("[Boot] All logger checked finish! Non error!");
+        return true;
+    }
+
+    private static boolean registerEventListener() {
+        BoolResult boolResult = EventDispatcher.INSTANCE.registerEventListener(BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
+
         return true;
     }
 }
