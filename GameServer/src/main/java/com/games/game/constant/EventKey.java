@@ -12,14 +12,5 @@ import com.romje.component.checker.constcheck.ConstUnique;
  */
 @ConstUnique
 public class EventKey {
-
-    /**
-     * 测试事件
-     */
-    public static final int TEST_EVENT = 1;
-
-    /**
-     * 测试事件2
-     */
-    public static final int TEST_EVENT2 = 2;
+    
 }

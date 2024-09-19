@@ -1,19 +1,20 @@
 package com.games.framework.component.eventkit;
 
+import com.games.framework.log.Log;
 import com.games.framework.utils.ByteBuddyUtil;
 import com.games.framework.utils.ScanUtil;
 import com.romje.model.BoolResult;
+import com.romje.utils.CollectionUtil;
 import com.romje.utils.EmptyUtil;
 import com.romje.utils.ReflectionUtil;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -25,18 +26,40 @@ public enum EventDispatcher {
 
     INSTANCE;
 
-    private final Map<Class<?>, Consumer<Object>> eventListenerMap = new HashMap<>();
+    /**
+     * 所有事件，对应的最终监听处理方法的映射
+     * key：事件唯一标识，value：对应事件的所有监听方法信息（优先级排序）
+     */
+    private final Map<Integer, List<EventListenerEntry>> eventListenersMap = new HashMap<>();
 
-    private final Map<Class<?>, List<Consumer<Object>>> eventListenersMap = new HashMap<>();
+    /**
+     * 是否需要将“动态字节码代理类”输出到文件展示出来
+     */
+    @Setter
+    @Getter
+    private boolean isShow = false;
 
-    public BoolResult publish(Object param) {
-        Consumer<Object> consumer = this.eventListenerMap.get(param.getClass());
-        if (Objects.isNull(consumer)) {
-            return BoolResult.success();
+    /**
+     * 事件触发，执行指定事件的所有监听方法
+     * <p> 如果针对指定事件，没有任何监听方法需要执行，则认为成功，返回{@code true}
+     *
+     * @param eventKey 事件唯一标识
+     * @param param    最终处理事件的执行方法所需要的参数，不允许为{@code null}
+     */
+    public void dispatch(int eventKey, @NonNull Object param) {
+        List<EventListenerEntry> eventListenerEntries = this.eventListenersMap.get(eventKey);
+        if (EmptyUtil.isEmpty(eventListenerEntries)) {
+            return;
         }
 
-        consumer.accept(param);
-        return BoolResult.success();
+        for (EventListenerEntry entry : eventListenerEntries) {
+            // 异常捕获放到循环内，不要让一个异常中断所有监听者
+            try {
+                entry.getProxyConsumer().accept(param);
+            } catch (Exception e) {
+                Log.FRAME.warn("[Event] event key:{} handle:{} exception!", eventKey, entry, e);
+            }
+        }
     }
 
     /**
@@ -62,6 +85,12 @@ public enum EventDispatcher {
      * @return 任何错误或者异常返回{@code false}，失败信息在{@link BoolResult#message()}中。
      */
     public BoolResult registerEventListener(List<Class<?>> classList) {
+        if (EmptyUtil.isEmpty(classList)) {
+            return BoolResult.success();
+        }
+
+        // 先按照类名进行排序，防止随机性（没有任何逻辑作用）
+        classList.sort(Comparator.comparing(Class::getName));
         for (Class<?> clazz : classList) {
             BoolResult singleResult = registerEventListener(clazz);
             if (singleResult.isFail()) {
@@ -105,24 +134,39 @@ public enum EventDispatcher {
             return BoolResult.fail("event listener method non static: " + method.getName());
         }
 
-        Annotation annotation = method.getAnnotation(EventListener.class);
+        EventListener annotation = method.getAnnotation(EventListener.class);
         Objects.requireNonNull(annotation);
 
         try {
-            Class<?> clazz = ByteBuddyUtil.generateConsumer(eventHandleClass, method, true);
+            Class<?> clazz = ByteBuddyUtil.generateConsumer(eventHandleClass, method, this.isShow);
             @SuppressWarnings("unchecked")
             Consumer<Object> consumer = (Consumer<Object>) clazz.getConstructor().newInstance();
 
-            // 放入监听列表
-
-            Consumer<Object> oldValue = this.eventListenerMap.put(method.getParameterTypes()[0], consumer);
-            if (Objects.nonNull(oldValue)) {
-                return BoolResult.fail("event listener repeated, param: " + method.getParameterTypes()[0]);
+            // 循环每一个key，将当前类的当前方法的动态代理类注册监听即可
+            for (int eventKey : annotation.value()) {
+                EventListenerEntry newEntry = EventListenerEntry.newInstance(eventHandleClass, method, annotation, consumer);
+                this.registerKeyListener(eventKey, newEntry);
             }
         } catch (IOException | InstantiationException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | NoSuchMethodException | SecurityException e) {
             return BoolResult.fail("register event listener exception: " + e.getMessage());
         }
         return BoolResult.success();
+    }
+
+    /**
+     * 将对一个事件的监听方法注册到监听列表，优先级相同的时候，符合"先进先出"
+     *
+     * @param eventKey 事件的唯一标识
+     * @param newEntry 最终处理方法的统一封装
+     */
+    private void registerKeyListener(int eventKey, EventListenerEntry newEntry) {
+        List<EventListenerEntry> listenerEntryList = this.eventListenersMap.get(eventKey);
+        if (Objects.isNull(listenerEntryList)) {
+            listenerEntryList = new ArrayList<>();
+            this.eventListenersMap.put(eventKey, listenerEntryList);
+        }
+
+        CollectionUtil.insertWithCompare(listenerEntryList, newEntry);
     }
 }

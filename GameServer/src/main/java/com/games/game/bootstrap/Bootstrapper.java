@@ -31,16 +31,7 @@ public final class Bootstrapper {
         exitOnFail(checkEnumFieldRepeat(), 1);
         exitOnFail(checkConstFieldRepeat(), 1);
         exitOnFail(checkLoggerConfig(), 1);
-
-        // todo:
         exitOnFail(registerEventListener(), 1);
-        EventDispatcher.INSTANCE.publish(123);
-        EventDispatcher.INSTANCE.publish("测试是否可以使用");
-        EventDispatcher.INSTANCE.publish(new Object());
-        EventDispatcher.INSTANCE.publish(new Test());
-        EventDispatcher.INSTANCE.publish(new Bootstrapper());
-
-        Log.LOGIC.info("[Boot] Check jod is finish!");
     }
 
     private static void exitOnFail(boolean result, int code) {

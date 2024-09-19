@@ -86,4 +86,47 @@ public final class CollectionUtil {
     public static <K, V> boolean nonContains(Map<K, V> map, K key) {
         return Objects.isNull(map) || !map.containsKey(key);
     }
+
+    /**
+     * 向一个{@link List}中插入一个新元素，按照{@link Comparable}结果进行排序
+     *
+     * <p>该接口会按照顺序插入，默认是“从小到大”，大小的含义是{@link Comparable}的结果
+     * <p>如果出现“元素相等”的情况，那么新插入的元素默认是在“相等元素”的最后。
+     *
+     * @param sortedList 已经是有序地列表,不允许为{@code null}
+     * @param newElement 新插入的元素
+     * @param <T>        元素必许是可以“自比较的”，实现了{@link Comparable}接口的类
+     */
+    public static <T extends Comparable<T>> void insertWithCompare(List<T> sortedList, T newElement) {
+        Objects.requireNonNull(sortedList);
+        Objects.requireNonNull(newElement);
+
+        // 列表为空，直接添加即可
+        if (sortedList.isEmpty()) {
+            sortedList.add(newElement);
+            return;
+        }
+
+        // “大于等于”最后一个，直接放最后
+        if (newElement.compareTo(sortedList.get(sortedList.size() - 1)) >= 0) {
+            sortedList.add(newElement);
+            return;
+        }
+
+        // "小于"最前面一个，直接放最前
+        if (newElement.compareTo(sortedList.get(0)) < 0) {
+            sortedList.add(0, newElement);
+            return;
+        }
+
+        // "小于"某个位置，并且“大于等于”这个位置的前一个位置，直接插入
+        for (int index = sortedList.size() - 1; index >= 1; index--) {
+            T current = sortedList.get(index);
+            T advance = sortedList.get(index - 1);
+            // 这里一定会找到的，因为已经判断过队首和队尾了
+            if (newElement.compareTo(current) < 0 && newElement.compareTo(advance) >= 0) {
+                sortedList.add(index, newElement);
+            }
+        }
+    }
 }

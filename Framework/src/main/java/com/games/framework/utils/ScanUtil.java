@@ -51,6 +51,36 @@ public class ScanUtil {
     }
 
     /**
+     * {@link #scanInterfaceAsSet(String, Class)}
+     *
+     * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}
+     */
+    public static <T> List<Class<? extends T>> scanInterfaceAsList(String packageName, Class<T> interfaceClass) {
+        Set<Class<? extends T>> classSet = scanInterfaceAsSet(packageName, interfaceClass);
+        return EmptyUtil.nonEmpty(classSet) ? new ArrayList<>(classSet) : Collections.emptyList();
+    }
+
+    /**
+     * 扫描指定包下的所有实现了指定接口的类
+     *
+     * @param packageName    指定包名，不允许为{@code null}和{@code empty}
+     * @param interfaceClass 指定接口，不允许为{@code null}
+     * @return 任何错误返回{@code Collections.emptySet()}，不会为{@code null}
+     */
+    public static <T> Set<Class<? extends T>> scanInterfaceAsSet(String packageName, Class<T> interfaceClass) {
+        if (EmptyUtil.isEmpty(packageName) || Objects.isNull(interfaceClass) || !interfaceClass.isInterface()) {
+            return Collections.emptySet();
+        }
+
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.setUrls(ClasspathHelper.forPackage(packageName));
+        configurationBuilder.setScanners(Scanners.SubTypes);
+
+        Reflections reflections = new Reflections(configurationBuilder);
+        return reflections.getSubTypesOf(interfaceClass);
+    }
+
+    /**
      * {@link #scanAnnotationAsSet(String, Class)}
      *
      * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}
