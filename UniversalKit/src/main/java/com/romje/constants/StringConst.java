@@ -10,5 +10,5 @@ public class StringConst {
     /**
      * 空字符串
      */
-    public final static String BLANK_STRING = "";
+    public static final String BLANK_STRING = "";
 }

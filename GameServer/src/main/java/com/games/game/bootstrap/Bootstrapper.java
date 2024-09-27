@@ -114,7 +114,10 @@ public final class Bootstrapper {
 
     private static boolean registerEventListener() {
         BoolResult boolResult = EventDispatcher.INSTANCE.registerEventListener(BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
-
+        if (boolResult.isFail()) {
+            Log.LOGIC.error("[Boot] Register event listener fail, message:{}!", boolResult.message());
+            return false;
+        }
         return true;
     }
 }
