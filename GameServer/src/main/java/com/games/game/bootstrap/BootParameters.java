@@ -35,6 +35,11 @@ public final class BootParameters {
     public static final String SCAN_LOGGER_PACKAGE_NAME = "com.games";
 
     /**
+     * 扫描所有可复用对象的包名
+     */
+    public static final String SCAN_REUSABLE_PACKAGE_NAME = "com.games";
+
+    /**
      * 日志配置文件名称
      */
     public static final String LOG_CONFIG_FILE_NAME = "log4j2.xml";

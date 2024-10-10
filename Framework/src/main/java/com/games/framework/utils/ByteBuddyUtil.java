@@ -1,17 +1,27 @@
 package com.games.framework.utils;
 
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.bytecode.assign.Assigner;
+import net.bytebuddy.jar.asm.ClassReader;
+import net.bytebuddy.jar.asm.ClassVisitor;
+import net.bytebuddy.jar.asm.MethodVisitor;
+import net.bytebuddy.jar.asm.Opcodes;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -28,6 +38,8 @@ import java.util.function.Consumer;
 public class ByteBuddyUtil {
 
     private static final String CONSUMER_ACCEPT_METHOD_NAME = "accept";
+
+    private static final String CLASS_FILE_EXTENSION = ".class";
 
     private ByteBuddyUtil() {
     }
@@ -49,10 +61,7 @@ public class ByteBuddyUtil {
 
         // 在生成的类中定义并实现方法
         DynamicType.Unloaded<?> dynamicType = builder
-                .defineMethod(
-                        CONSUMER_ACCEPT_METHOD_NAME,
-                        void.class,
-                        net.bytebuddy.description.modifier.Visibility.PUBLIC)
+                .defineMethod(CONSUMER_ACCEPT_METHOD_NAME, void.class, Visibility.PUBLIC)
                 .withParameter(Object.class)
                 .intercept(MethodCall.invoke(method)
                         .withArgument(0)
@@ -83,5 +92,97 @@ public class ByteBuddyUtil {
         try (FileOutputStream fos = new FileOutputStream(path.toFile())) {
             fos.write(classBytes);
         }
+    }
+
+    /**
+     * 获取类中，在指定“方法”中直接被使用的“成员变量”
+     *
+     * <p> “直接使用”表示，不包括那些没有经过参数传递并且在嵌套方法中出现的字段
+     * <p> 该接口不会获取所有静态字段，{@code static}修饰的不被认为是实例字段
+     * <p> 如果有父类，指定方法中直接使用父类字段，也会被包括在结果中
+     *
+     * @param clazz      指定类，不允许为{@code null}
+     * @param methodName 指定方法名，不允许为{@code null}
+     * @return 在方法中直接出现的字段名称集合。不会为{@code null}
+     * @throws IOException 类资源获取异常
+     */
+    public static Set<String> listFieldsInMethod(Class<?> clazz, String methodName) throws IOException {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(methodName);
+
+        String fileName = clazz.getSimpleName() + CLASS_FILE_EXTENSION;
+        try (InputStream classInputStream = clazz.getResourceAsStream(fileName)) {
+            if (Objects.isNull(classInputStream)) {
+                return Collections.emptySet();
+            }
+
+            ClassReader classReader = new ClassReader(classInputStream);
+            Set<String> usedFieldSet = new HashSet<>();
+
+            classReader.accept(new ClassVisitor(Opcodes.ASM9) {
+                @Override
+                public MethodVisitor visitMethod(int access, String name, String descriptor,
+                                                 String signature, String[] exceptions) {
+                    if (name.equals(methodName)) {
+                        return new MethodVisitor(Opcodes.ASM9) {
+                            @Override
+                            public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
+                                if (opcode == Opcodes.PUTFIELD || opcode == Opcodes.GETFIELD) {
+                                    usedFieldSet.add(name);
+                                }
+                                super.visitFieldInsn(opcode, owner, name, descriptor);
+                            }
+                        };
+                    }
+                    return super.visitMethod(access, name, descriptor, signature, exceptions);
+                }
+            }, 0);
+            return usedFieldSet;
+        }
+    }
+
+    /**
+     * 检查子类指定方法中是否调用了继承自父类的同名方法，即{@code super.method()}
+     *
+     * @param childClass  子类，不允许为{@code null}
+     * @param parentClass 父类，不允许为{@code null}
+     * @param methodName  指定方法名称，不允许为{@code null}
+     * @return 只有当子类指定方法中调用了继承父类的方法时候，返回{@code true}
+     * @throws IOException 类资源获取异常
+     */
+    public static boolean checkSuperMethodCall(Class<?> childClass, Class<?> parentClass, String methodName)
+            throws IOException {
+        Objects.requireNonNull(childClass);
+        Objects.requireNonNull(parentClass);
+        Objects.requireNonNull(methodName);
+
+        String childClassName = childClass.getName().replace('.', '/');
+        String parentClassName = parentClass.getName().replace('.', '/');
+
+        final boolean[] isCalled = {false};
+        ClassReader classReader = new ClassReader(childClassName);
+        classReader.accept(new ClassVisitor(Opcodes.ASM9) {
+            @Override
+            public MethodVisitor visitMethod(int access, String name, String descriptor,
+                                             String signature, String[] exceptions) {
+                if (name.equals(methodName)) {
+                    return new MethodVisitor(Opcodes.ASM9) {
+                        @Override
+                        public void visitMethodInsn(int opcode, String owner, String name,
+                                                    String descriptor, boolean isInterface) {
+                            // 检查是否调用了父类的同名方法
+                            if (opcode == Opcodes.INVOKESPECIAL
+                                    && methodName.equals(name) && parentClassName.equals(owner)) {
+                                isCalled[0] = true;
+                            }
+                            super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+                        }
+                    };
+                }
+                return super.visitMethod(access, name, descriptor, signature, exceptions);
+            }
+        }, 0);
+
+        return isCalled[0];
     }
 }

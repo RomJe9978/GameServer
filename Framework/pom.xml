@@ -35,6 +35,13 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--单元测试——JUnit 5-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!--反射、包扫描工具库-->
         <dependency>
             <groupId>org.reflections</groupId>

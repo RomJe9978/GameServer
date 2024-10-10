@@ -56,6 +56,7 @@ public enum EnumLookup {
 
     /**
      * {@link #getEnum(Class, Object, Enum)}
+     * <p> 必须保证使用该接口的枚举类中指定字段使用了{@link EnumKey}注解。
      */
     public <T extends Enum<T>> T getEnum(Class<T> clazz, Object enumKey) {
         return getEnum(clazz, enumKey, null);
@@ -63,6 +64,7 @@ public enum EnumLookup {
 
     /**
      * 根据"枚举类型"和"注册的键值"获取枚举常量。
+     * <p> 必须保证使用该接口的枚举类中指定字段使用了{@link EnumKey}注解。
      *
      * @param clazz       枚举类的Class对象，用于指定要检索的枚举类型。
      * @param enumKey     用于标识特定枚举常量的键，注册的枚举字段的值。

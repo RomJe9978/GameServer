@@ -1,5 +1,6 @@
 package com.games.game.bootstrap;
 
+import com.games.framework.component.checker.CleanUpChecker;
 import com.games.framework.component.eventkit.EventDispatcher;
 import com.games.framework.utils.ScanUtil;
 import com.games.game.component.Log4j2LoggerChecker;
@@ -10,9 +11,13 @@ import com.romje.component.checker.constcheck.ConstUnique;
 import com.romje.component.checker.enumcheck.EnumChecker;
 import com.romje.component.checker.enumcheck.EnumUnique;
 import com.romje.component.manager.enumlookup.EnumLookup;
+import com.romje.component.pool.object.Reusable;
 import com.romje.model.BoolResult;
+import com.romje.utils.EmptyUtil;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -31,6 +36,7 @@ public final class Bootstrapper {
         exitOnFail(checkEnumFieldRepeat(), 1);
         exitOnFail(checkConstFieldRepeat(), 1);
         exitOnFail(checkLoggerConfig(), 1);
+        exitOnFail(checkReusable(), 1);
         exitOnFail(registerEventListener(), 1);
     }
 
@@ -109,6 +115,31 @@ public final class Bootstrapper {
         }
 
         Log.LOGIC.info("[Boot] All logger checked finish! Non error!");
+        return true;
+    }
+
+    private static boolean checkReusable() {
+        List<Class<? extends Reusable>> reusableList = ScanUtil.scanInterfaceAsList(BootParameters.SCAN_REUSABLE_PACKAGE_NAME, Reusable.class);
+        if (EmptyUtil.isEmpty(reusableList)) {
+            Log.LOGIC.info("[Boot] check reusable list is empty!");
+            return true;
+        }
+
+        List<Class<?>> clazzList = new ArrayList<>(reusableList.size());
+        clazzList.addAll(reusableList);
+
+        try {
+            BoolResult boolResult = CleanUpChecker.checkCleanUp(clazzList, "clear");
+            if (boolResult.isFail()) {
+                Log.LOGIC.error("[Boot] check clean up error! {}", boolResult.message());
+                return false;
+            }
+        } catch (IOException e) {
+            Log.LOGIC.error("[Boot] check clean up exception!", e);
+            return false;
+        }
+
+        Log.LOGIC.info("[Boot] check clean up finish! Package name:{}", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
         return true;
     }
 

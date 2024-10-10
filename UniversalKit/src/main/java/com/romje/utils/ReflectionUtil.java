@@ -111,4 +111,45 @@ public final class ReflectionUtil {
     public static boolean nonStaticMethod(Method method) {
         return !isStaticMethod(method);
     }
+
+    /**
+     * 检查指定类中是否有一个{@code public}的方法，继承父类或者实现接口也算
+     *
+     * @param clazz      指定类，不允许为{@code null}
+     * @param methodName 指定方法名，不允许为{@code null}
+     * @return 只有当包含的时候，才会返回{@code true}
+     */
+    public static boolean hasPublicMethod(Class<?> clazz, String methodName) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(methodName);
+
+        Method[] methods = clazz.getMethods();
+        for (Method method : methods) {
+            if (method.getName().equals(methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 检查指定类自身内部是否有一个指定名称的方法。
+     * 明确表示，检查的是类自身显式声明的方法，而非隐式继承的方法。
+     *
+     * @param clazz      指定类，不允许为{@code null}
+     * @param methodName 指定方法名，不允许为{@code null}
+     * @return 只有当包含的时候，才会返回{@code true}
+     */
+    public static boolean hasDeclaredMethod(Class<?> clazz, String methodName) {
+        Objects.requireNonNull(clazz);
+        Objects.requireNonNull(methodName);
+
+        Method[] methods = clazz.getDeclaredMethods();
+        for (Method method : methods) {
+            if (method.getName().equals(methodName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
