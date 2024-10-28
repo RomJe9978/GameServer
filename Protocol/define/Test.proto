@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package="com.games.proto";
+option java_outer_classname="Test";
+
+message FirstTest{
+    int32 value = 1;
+    string text = 2;
+}

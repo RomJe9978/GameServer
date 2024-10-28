@@ -19,6 +19,9 @@ import java.util.Set;
  */
 public class CleanUpChecker {
 
+    private CleanUpChecker() {
+    }
+
     /**
      * 指定一组类，检查每个类中的指定方法是否完成了对需要清除的字段进行了清理操作
      *

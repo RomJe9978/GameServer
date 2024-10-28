@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/Dependency/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Framework/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Framework/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Protocol/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Protocol/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

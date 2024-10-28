@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -57,18 +58,17 @@ public class ByteBuddyUtil {
         // 使用 Byte Buddy 生成动态类
         String newClassName = handler.getName() + "$" + method.getName().toUpperCase();
         DynamicType.Builder<?> builder = new ByteBuddy()
-                .subclass(Object.class).name(newClassName).implement(Consumer.class);
-
-        // 在生成的类中定义并实现方法
-        DynamicType.Unloaded<?> dynamicType = builder
+                .subclass(Object.class)
+                .name(newClassName)
+                .implement(Consumer.class)
                 .defineMethod(CONSUMER_ACCEPT_METHOD_NAME, void.class, Visibility.PUBLIC)
                 .withParameter(Object.class)
                 .intercept(MethodCall.invoke(method)
                         .withArgument(0)
-                        .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC))
-                .make();
+                        .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC));
 
         // 将类的字节码输出到文件
+        DynamicType.Unloaded<?> dynamicType = builder.make();
         if (isShow) {
             saveClassToFile(newClassName, dynamicType.getBytes());
         }
@@ -77,6 +77,41 @@ public class ByteBuddyUtil {
         ClassLoader classLoader = handler.getClassLoader();
         return dynamicType.load(classLoader, ClassLoadingStrategy.Default.INJECTION).getLoaded();
     }
+
+    /**
+     * 使用Byte Buddy动态生成一个{@link BiConsumer}的实现类。
+     * <p> 实现类会实现{@link BiConsumer#accept(Object, Object)}方法，方法体直接调用{@code method}方法。
+     *
+     * @param handler 方法所依附的类，动态生成的实现类使用该类的“类加载器”。
+     * @param method  外部保证方法符合{@link BiConsumer}要求，两个参数，无返回值。
+     * @param isShow  是否将动态生成的类的字节码，输出保存到文件。{@code true}代表输出。
+     * @return {@link BiConsumer}的实现类的{@code Class}，并且已经加载到JVM内。
+     */
+    public static Class<?> generateBiConsumer(Class<?> handler, Method method, boolean isShow) throws IOException {
+        // 使用 Byte Buddy 生成动态类
+        String newClassName = handler.getName() + "$" + method.getName().toUpperCase();
+        DynamicType.Builder<?> builder = new ByteBuddy()
+                .subclass(Object.class)
+                .name(newClassName)
+                .implement(BiConsumer.class)
+                .defineMethod(CONSUMER_ACCEPT_METHOD_NAME, void.class, Visibility.PUBLIC)
+                .withParameters(Object.class, Object.class)
+                .intercept(MethodCall.invoke(method)
+                        .withArgument(0)
+                        .withArgument(1)
+                        .withAssigner(Assigner.DEFAULT, Assigner.Typing.DYNAMIC));
+
+        // 将类的字节码输出到文件
+        DynamicType.Unloaded<?> dynamicType = builder.make();
+        if (isShow) {
+            saveClassToFile(newClassName, dynamicType.getBytes());
+        }
+
+        // 加载并返回生成的类
+        ClassLoader classLoader = handler.getClassLoader();
+        return dynamicType.load(classLoader, ClassLoadingStrategy.Default.INJECTION).getLoaded();
+    }
+
 
     /**
      * 将动态字节码技术生成的Class，输出到文件中展示代码

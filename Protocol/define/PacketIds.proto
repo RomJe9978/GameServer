@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+option java_package="com.games.proto";
+option java_outer_classname="PacketIds";
+
+enum Ids {
+    None = 0;
+    FIRST_TEST = 1000;
+}

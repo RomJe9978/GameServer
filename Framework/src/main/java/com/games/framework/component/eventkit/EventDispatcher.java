@@ -144,7 +144,7 @@ public enum EventDispatcher {
 
             // 循环每一个key，将当前类的当前方法的动态代理类注册监听即可
             for (int eventKey : annotation.value()) {
-                EventListenerEntry newEntry = EventListenerEntry.newInstance(eventHandleClass, method, annotation, consumer);
+                EventListenerEntry newEntry = EventListenerEntry.of(eventHandleClass, method, annotation, consumer);
                 this.registerKeyListener(eventKey, newEntry);
             }
         } catch (IOException | InstantiationException | IllegalAccessException | IllegalArgumentException |

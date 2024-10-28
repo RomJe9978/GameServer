@@ -16,14 +16,14 @@ import java.util.function.Consumer;
 public class EventListenerEntry implements Comparable<EventListenerEntry> {
 
     /**
-     * 事件监听，最终针对事件的处理方法所在的类
+     * 事件监听，最终针对事件的处理方法所在的类名，简称
      */
-    private Class<?> listenClass;
+    private String className;
 
     /**
-     * 事件监听，最终针对事件的处理方法的原始方法
+     * 事件监听，最终针对事件的处理方法的原始方法的方法名
      */
-    private Method listenMethod;
+    private String methodName;
 
     /**
      * 事件监听，最终处理方法标识的注解信息
@@ -38,11 +38,11 @@ public class EventListenerEntry implements Comparable<EventListenerEntry> {
     private EventListenerEntry() {
     }
 
-    public static EventListenerEntry newInstance(Class<?> listenClass, Method listenMethod,
-                                                 EventListener annotation, Consumer<Object> consumer) {
+    public static EventListenerEntry of(Class<?> listenClass, Method listenMethod,
+                                        EventListener annotation, Consumer<Object> consumer) {
         EventListenerEntry instance = new EventListenerEntry();
-        instance.listenClass = listenClass;
-        instance.listenMethod = listenMethod;
+        instance.className = listenClass.getSimpleName();
+        instance.methodName = listenMethod.getName();
         instance.annotation = annotation;
         instance.proxyConsumer = consumer;
         return instance;
@@ -74,12 +74,12 @@ public class EventListenerEntry implements Comparable<EventListenerEntry> {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (Objects.nonNull(this.listenClass)) {
-            stringBuilder.append("class:").append(this.listenClass.getSimpleName()).append(",");
+        if (Objects.nonNull(this.className)) {
+            stringBuilder.append("class:").append(this.className).append(",");
         }
 
-        if (Objects.nonNull(this.listenMethod)) {
-            stringBuilder.append("method:").append(this.listenMethod.getName()).append(",");
+        if (Objects.nonNull(this.methodName)) {
+            stringBuilder.append("method:").append(this.methodName).append(",");
         }
 
         if (Objects.nonNull(this.annotation)) {

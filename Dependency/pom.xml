@@ -97,6 +97,27 @@
                 <artifactId>byte-buddy</artifactId>
                 <version>1.14.8</version>
             </dependency>
+
+            <!-- Protobuf 依赖 -->
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.19.6</version>
+            </dependency>
+
+            <!-- Netty 相关依赖 -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.68.Final</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-transport-native-epoll</artifactId>
+                <version>4.1.68.Final</version>
+                <classifier>linux-x86_64</classifier>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

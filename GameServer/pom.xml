@@ -13,6 +13,19 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+    <!--统一所有依赖的版本管理,仅仅只是版本管理，该项不会产生实际依赖-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.romje</groupId>
+                <artifactId>Dependency</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!--自定义框架层的依赖-->
         <dependency>
@@ -21,69 +34,48 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!--slf4j日志框架的门面类-->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.20</version>
-        </dependency>
-
         <!--log4j对门面框架slf4j的实现桥梁-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.20.0</version>
         </dependency>
 
         <!--log4j2的使用版本-->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.20.0</version>
         </dependency>
 
         <!--log4j2异步logger对高性能框架disruptor的依赖-->
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
-            <version>3.4.4</version>
         </dependency>
 
         <!--样板代码库lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.28</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!--单元测试——JUnit 5-->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--字节码操作库-->
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.29.2-GA</version>
         </dependency>
 
         <!--配置文件处理库-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-configuration2</artifactId>
-            <version>2.7</version>
         </dependency>
 
         <!--yaml配置处理库-->
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
-            <version>1.27</version>
+        </dependency>
+
+        <!--单元测试——JUnit 5-->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
