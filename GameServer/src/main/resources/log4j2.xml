@@ -106,7 +106,7 @@
 
         <!-- 三方依赖包中的日志配置 -->
         <Logger name="org.reflections" level="error" additivity="false">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ConsoleAppender"/>
         </Logger>
 
         <!--root是所有logger的默认父级，如果指定logger没有配置，则会直接继承使用root的配置-->
