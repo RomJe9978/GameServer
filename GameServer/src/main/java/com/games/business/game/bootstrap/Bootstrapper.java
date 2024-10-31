@@ -8,6 +8,7 @@ import com.games.framework.component.eventkit.EventDispatcher;
 import com.games.framework.component.packetkit.PacketDispatcher;
 import com.games.framework.component.packetkit.PacketListenerEntry;
 import com.games.framework.component.protoparse.ProtoParseProxy;
+import com.games.framework.component.xlskit.XlsLoader;
 import com.games.framework.utils.BootstrapUtil;
 import com.games.framework.utils.ScanUtil;
 import com.google.protobuf.GeneratedMessageV3;
@@ -44,6 +45,8 @@ public final class Bootstrapper {
         BootstrapUtil.exitOnFailure(registerEventListener(), "register event");
         BootstrapUtil.exitOnFailure(registerPacketListener(), "register packet");
         BootstrapUtil.exitOnFailure(registerPacketParser(), "register packet parser");
+
+        BootstrapUtil.exitOnFailure(loadXlsData(), "load excel");
     }
 
     private static boolean registerEnums() {
@@ -53,11 +56,11 @@ public final class Bootstrapper {
         try {
             BoolResult boolResult = EnumLookup.INSTANCE.registerEnums(enumClassList);
             if (boolResult.isFail()) {
-                Log.LOGIC.error("[Boot] Register enum manage fail:{}!", boolResult.message());
+                Log.LOGIC.error("[Boot] Register enum manage fail:[{}]!", boolResult.message());
                 return false;
             }
 
-            Log.LOGIC.info("[Boot] Register enum manage success!Package name:{}", BootParameters.SCAN_ENUM_MANAGE_PACKAGE_NAME);
+            Log.LOGIC.info("[Boot] Register enum manage success!Package name:[{}]", BootParameters.SCAN_ENUM_MANAGE_PACKAGE_NAME);
             return true;
         } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             Log.LOGIC.error("[Boot] Register enum manage exception!", e);
@@ -72,11 +75,11 @@ public final class Bootstrapper {
         try {
             BoolResult boolResult = EnumChecker.checkFieldUnique(enumClassList, EnumUnique.class);
             if (boolResult.isFail()) {
-                Log.LOGIC.error("[Boot] Check enum field repeat fail:{}!", boolResult.message());
+                Log.LOGIC.error("[Boot] Check enum field repeat fail:[{}]!", boolResult.message());
                 return false;
             }
 
-            Log.LOGIC.info("[Boot] Check enum field repeat success!Package name:{}", BootParameters.ENUM_CHECKED_PACKAGE_NAME);
+            Log.LOGIC.info("[Boot] Check enum field repeat success!Package name:[{}]", BootParameters.ENUM_CHECKED_PACKAGE_NAME);
             return true;
         } catch (Exception e) {
             Log.LOGIC.error("[Boot] Check enum field repeat exception!", e);
@@ -91,11 +94,11 @@ public final class Bootstrapper {
 
             BoolResult boolResult = ConstChecker.checkFieldUnique(classList);
             if (boolResult.isFail()) {
-                Log.LOGIC.error("[Boot] Check const field repeat fail:{}!", boolResult.message());
+                Log.LOGIC.error("[Boot] Check const field repeat fail:[{}]!", boolResult.message());
                 return false;
             }
 
-            Log.LOGIC.info("[Boot] Check const field repeat success! Package name:{}", BootParameters.CONST_CHECK_UNIQUE_PACKAGE_NAME);
+            Log.LOGIC.info("[Boot] Check const field repeat success! Package name:[{}]", BootParameters.CONST_CHECK_UNIQUE_PACKAGE_NAME);
             return true;
         } catch (IllegalAccessException e) {
             Log.LOGIC.error("[Boot] Check const field repeat exception!", e);
@@ -110,11 +113,11 @@ public final class Bootstrapper {
                 ScanUtil.scanAnnotationAsList(BootParameters.SCAN_LOGGER_PACKAGE_NAME, LoggerRepository.class);
         BoolResult boolResult = Log4j2LoggerChecker.checkLoggerConfigured(classList, configNameSet);
         if (boolResult.isFail()) {
-            Log.LOGIC.error("[Boot] Check logger config fail:{}!", boolResult.message());
+            Log.LOGIC.error("[Boot] Check logger config fail:[{}]!", boolResult.message());
             return false;
         }
 
-        Log.LOGIC.info("[Boot] All logger checked finish! Non error!Package name:{}", BootParameters.SCAN_LOGGER_PACKAGE_NAME);
+        Log.LOGIC.info("[Boot] All logger checked finish! Non error!Package name:[{}]", BootParameters.SCAN_LOGGER_PACKAGE_NAME);
         return true;
     }
 
@@ -131,7 +134,7 @@ public final class Bootstrapper {
         try {
             BoolResult boolResult = CleanUpChecker.checkCleanUp(clazzList, "clear");
             if (boolResult.isFail()) {
-                Log.LOGIC.error("[Boot] check clean up error! {}", boolResult.message());
+                Log.LOGIC.error("[Boot] check clean up error:[{}]", boolResult.message());
                 return false;
             }
         } catch (IOException e) {
@@ -139,7 +142,7 @@ public final class Bootstrapper {
             return false;
         }
 
-        Log.LOGIC.info("[Boot] check clean up finish! Package name:{}", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
+        Log.LOGIC.info("[Boot] check clean up success! Package name:[{}]", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
         return true;
     }
 
@@ -147,11 +150,11 @@ public final class Bootstrapper {
         EventDispatcher.INSTANCE.setShow(true);
         BoolResult boolResult = EventDispatcher.INSTANCE.registerEventListener(BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
         if (boolResult.isFail()) {
-            Log.LOGIC.error("[Boot] Register event listener fail, message:{}!", boolResult.message());
+            Log.LOGIC.error("[Boot] Register event listener fail:[{}]!", boolResult.message());
             return false;
         }
 
-        Log.LOGIC.info("[Boot] Register event listener finish! Package name:{}", BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
+        Log.LOGIC.info("[Boot] Register event listener success! Package name:[{}]", BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
         return true;
     }
 
@@ -159,11 +162,11 @@ public final class Bootstrapper {
         PacketDispatcher.INSTANCE.setShow(true);
         BoolResult boolResult = PacketDispatcher.INSTANCE.registerPacketListener(BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
         if (boolResult.isFail()) {
-            Log.LOGIC.error("[Boot] Register packet listener fail, message:{}!", boolResult.message());
+            Log.LOGIC.error("[Boot] Register packet listener fail:[{}]!", boolResult.message());
             return false;
         }
 
-        Log.LOGIC.info("[Boot] Register packet listener finish! Package name:{}", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
+        Log.LOGIC.info("[Boot] Register packet listener finish! Package name:[{}]", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
         return true;
     }
 
@@ -178,11 +181,30 @@ public final class Bootstrapper {
 
         BoolResult boolResult = ProtoParseProxy.INSTANCE.registerProxy(map);
         if (boolResult.isFail()) {
-            Log.LOGIC.error("[Boot] Generate proto parse fail, message:{}!", boolResult.message());
+            Log.LOGIC.error("[Boot] Generate proto parse fail:[{}]!", boolResult.message());
             return false;
         }
 
-        Log.LOGIC.info("[Boot] Generate proto parse finish!");
+        Log.LOGIC.info("[Boot] Generate proto parse success!");
+        return true;
+    }
+
+    private static boolean loadXlsData() {
+        BoolResult manageResult = XlsLoader.INSTANCE.loadXlsManager(BootParameters.XLS_DIR_NAME, BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
+        if (manageResult.isFail()) {
+            Log.LOGIC.error("[Boot] Load all excel manager fail:[ {} ]", manageResult.message());
+            return false;
+        }
+        Log.LOGIC.info("[Boot] Load all excel manager success! Package name:[{}]", BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
+
+
+        BoolResult assembleResult = XlsLoader.INSTANCE.loadXlsAssembler(BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
+        if (assembleResult.isFail()) {
+            Log.LOGIC.error("[Boot] Assemble all excel fail:[ {} ]", assembleResult.message());
+            return false;
+        }
+
+        Log.LOGIC.info("[Boot] Assemble all excel success! Package name:[{}]", BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
         return true;
     }
 }

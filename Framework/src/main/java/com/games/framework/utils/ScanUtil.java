@@ -81,6 +81,36 @@ public class ScanUtil {
     }
 
     /**
+     * {@link #scanSubclassAsSet(String, Class)}
+     *
+     * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}
+     */
+    public static <T> List<Class<? extends T>> scanSubclassAsList(String packageName, Class<T> interfaceClass) {
+        Set<Class<? extends T>> classSet = scanSubclassAsSet(packageName, interfaceClass);
+        return EmptyUtil.nonEmpty(classSet) ? new ArrayList<>(classSet) : Collections.emptyList();
+    }
+
+    /**
+     * 扫描指定包下的所有继承指定类的类
+     *
+     * @param packageName 指定包名，不允许为{@code null}和{@code empty}
+     * @param superClass  指定类，不允许为{@code null}
+     * @return 任何错误返回{@code Collections.emptySet()}，不会为{@code null}
+     */
+    public static <T> Set<Class<? extends T>> scanSubclassAsSet(String packageName, Class<T> superClass) {
+        if (EmptyUtil.isEmpty(packageName) || Objects.isNull(superClass)) {
+            return Collections.emptySet();
+        }
+
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.setUrls(ClasspathHelper.forPackage(packageName));
+        configurationBuilder.setScanners(Scanners.SubTypes);
+
+        Reflections reflections = new Reflections(configurationBuilder);
+        return reflections.getSubTypesOf(superClass);
+    }
+
+    /**
      * {@link #scanAnnotationAsSet(String, Class)}
      *
      * @return 任何错误返回{@code Collections.emptyList()}，不会为{@code null}

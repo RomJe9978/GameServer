@@ -45,7 +45,7 @@ public class BootstrapUtil {
      */
     public static void exitOnFailure(boolean result, int exitCode, String message) {
         if (!result) {
-            Log.FRAME.error("[Boot] Application boot error:{}", message);
+            Log.FRAME.error("[Boot] Application boot error: [ {} ]", message);
             System.exit(exitCode);
         }
     }

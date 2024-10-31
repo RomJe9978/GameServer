@@ -1,0 +1,24 @@
+[
+    {
+        "id": 1,
+        "age": 12,
+        "score": [],
+        "isBoy": false,
+        "isPass": []
+    },
+    {
+        "id": 2,
+        "age": 87,
+        "score": [
+            17,
+            80,
+            60
+        ],
+        "isBoy": true,
+        "isPass": [
+            false,
+            true,
+            true
+        ]
+    }
+]

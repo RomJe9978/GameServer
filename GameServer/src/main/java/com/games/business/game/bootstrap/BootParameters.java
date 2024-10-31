@@ -53,4 +53,14 @@ public final class BootParameters {
      * "网路包监听者"，需要扫描的包名
      */
     public static final String SCAN_PACKET_LISTENER_PACKAGE_NAME = "com.games";
+
+    /**
+     * 所有XLS配置文件所在目录
+     */
+    public static final String XLS_DIR_NAME = "./xls/";
+
+    /**
+     * 所有XLS配置表处理相关的扫描包名称
+     */
+    public static final String SCAN_XLS_HANDLER_PACKAGE_NAME = "com.games.xls";
 }
