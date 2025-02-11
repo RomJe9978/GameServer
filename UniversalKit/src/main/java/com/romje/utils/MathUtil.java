@@ -17,7 +17,7 @@ public final class MathUtil {
      * @param max 右边界(包含)
      * @return Returns true if {@code min <= value <= max}
      */
-    public static boolean isInRange(long value, long min, long max) {
+    public static boolean inRange(long value, long min, long max) {
         return (min <= value) && (value <= max);
     }
 
@@ -99,8 +99,8 @@ public final class MathUtil {
      * <p>如果给定值是“非正数”，则返回固定结果{@code 1}
      * <p>当计算结果超出整型的最大范围时，会抛出数据异常
      * <pre>
-     *     input: -1,0,1,2,3,15,16,17
-     *     output: 1,1,1,2,4,16,16,32
+     *     input: -1, 0, 1, 2, 3, 7, 8, 9
+     *     output: 1, 1, 1, 2, 4, 8, 8, 16
      * </pre>
      *
      * @param value 当大于"2^30"时，会有越界发生

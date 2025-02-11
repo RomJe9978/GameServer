@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
- * "网络包"最终监听处理方法的信息封装
+ * "Packet"最终监听处理方法的信息封装
  *
  * @author liu xuan jie
  */

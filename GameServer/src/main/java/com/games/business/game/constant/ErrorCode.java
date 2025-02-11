@@ -1,6 +1,7 @@
 package com.games.business.game.constant;
 
 import com.romje.component.manager.enumlookup.EnumKey;
+import com.romje.component.manager.enumlookup.EnumLookup;
 import lombok.Getter;
 
 /**
@@ -43,8 +44,19 @@ public enum ErrorCode {
         this.describe = describe;
     }
 
+    /**
+     * @return 如果没有对应错误码，返回{@code null}
+     */
+    public static ErrorCode valueOf(int code) {
+        return EnumLookup.INSTANCE.getEnum(ErrorCode.class, code);
+    }
+
     public final boolean isError() {
         return this != NON_ERROR;
+    }
+
+    public static boolean isError(ErrorCode errorCode) {
+        return errorCode != NON_ERROR;
     }
 
     public static boolean isError(int code) {
@@ -53,6 +65,10 @@ public enum ErrorCode {
 
     public final boolean nonError() {
         return this == NON_ERROR;
+    }
+
+    public static boolean nonError(ErrorCode errorCode) {
+        return errorCode == NON_ERROR;
     }
 
     public static boolean nonError(int code) {

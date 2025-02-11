@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  *
  * @author liu xuan jie
  */
-public class ByteBuddyUtil {
+public final class ByteBuddyUtil {
 
     private static final String CONSUMER_ACCEPT_METHOD_NAME = "accept";
 

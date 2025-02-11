@@ -7,17 +7,12 @@ import com.games.framework.log.Log;
  *
  * @author liu xuan jie
  */
-public class BootstrapUtil {
+public final class BootstrapUtil {
 
     /**
-     * 当调用处不指定退出码的时候，默认退出码
+     * 默认系统退出码
      */
-    private static final int DEFAULT_EXIT_CODE = 1;
-
-    /**
-     * 当调用处不指定错误描述的时候，默认提示“检查日志”
-     */
-    private static final String CHECK_LOG_MESSAGE = "check log";
+    private static final int DEFAULT_EXIT_CODE = -1;
 
     private BootstrapUtil() {
     }
@@ -26,7 +21,7 @@ public class BootstrapUtil {
      * {@link #exitOnFailure(boolean, int, String)}
      */
     public static void exitOnFailure(boolean result) {
-        exitOnFailure(result, DEFAULT_EXIT_CODE, CHECK_LOG_MESSAGE);
+        exitOnFailure(result, DEFAULT_EXIT_CODE, "check log");
     }
 
     /**

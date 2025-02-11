@@ -5,23 +5,94 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
- * 反射相关工具接口的封装
+ * 涉及{@link Class}的相关操作封装，包括反射
  *
  * @author liu xuan jie
  */
-public final class ReflectionUtil {
+public final class ClassUtil {
 
-    /**
-     * 枚举类中values方法的名称
-     */
     private static final String ENUM_VALUES_METHOD_NAME = "values";
 
-    private ReflectionUtil() {
+    /**
+     * 基本类型与其对应的包装类型的映射
+     */
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TO_WRAPPER = new HashMap<>(8);
+
+    /**
+     * 包装类型与其对应的基本类型的映射
+     */
+    private static final Map<Class<?>, Class<?>> WRAPPER_TO_PRIMITIVE = new HashMap<>(8);
+
+    static {
+        PRIMITIVE_TO_WRAPPER.put(boolean.class, Boolean.class);
+        PRIMITIVE_TO_WRAPPER.put(byte.class, Byte.class);
+        PRIMITIVE_TO_WRAPPER.put(char.class, Character.class);
+        PRIMITIVE_TO_WRAPPER.put(double.class, Double.class);
+        PRIMITIVE_TO_WRAPPER.put(float.class, Float.class);
+        PRIMITIVE_TO_WRAPPER.put(int.class, Integer.class);
+        PRIMITIVE_TO_WRAPPER.put(long.class, Long.class);
+        PRIMITIVE_TO_WRAPPER.put(short.class, Short.class);
+
+        WRAPPER_TO_PRIMITIVE.put(Boolean.class, boolean.class);
+        WRAPPER_TO_PRIMITIVE.put(Byte.class, byte.class);
+        WRAPPER_TO_PRIMITIVE.put(Character.class, char.class);
+        WRAPPER_TO_PRIMITIVE.put(Double.class, double.class);
+        WRAPPER_TO_PRIMITIVE.put(Float.class, float.class);
+        WRAPPER_TO_PRIMITIVE.put(Integer.class, int.class);
+        WRAPPER_TO_PRIMITIVE.put(Long.class, long.class);
+        WRAPPER_TO_PRIMITIVE.put(Short.class, short.class);
+    }
+
+    private ClassUtil() {
+    }
+
+    /**
+     * 判断一个类型是否是基本数据类型
+     *
+     * @param clazz 要检查的类型
+     * @return 如果类型是基本数据类型，则返回{@code true}；否则返回{@code false}
+     */
+    public static boolean isPrimitiveType(Class<?> clazz) {
+        return PRIMITIVE_TO_WRAPPER.containsKey(clazz);
+    }
+
+    /**
+     * 判断一个类型是否是基本数据类型的数组类
+     *
+     * @param clazz 要检查的类型
+     * @return 如果类型是基本数据类型的数组类，则返回 true；否则返回 false
+     */
+    public static boolean isPrimitiveArrayType(Class<?> clazz) {
+        if (!clazz.isArray()) {
+            return false;
+        }
+        Class<?> componentType = clazz.getComponentType();
+        return componentType.isPrimitive();
+    }
+
+    /**
+     * 将基本类型转换为其对应的包装类型
+     *
+     * @param field 要检查的字段
+     * @return 如果字段是基本数据类型，则返回其对应的包装类型；否则返回字段的原始类型
+     */
+    public static Class<?> convertToWrapperType(Field field) {
+        Class<?> type = field.getType();
+        return PRIMITIVE_TO_WRAPPER.getOrDefault(type, type);
+    }
+
+    /**
+     * 将包装类型转换为其对应的基本类型
+     *
+     * @param field 要检查的字段
+     * @return 如果字段是包装类型，则返回其对应的基本类型；否则返回字段的原始类型
+     */
+    public static Class<?> convertToPrimitiveType(Field field) {
+        Class<?> type = field.getType();
+        return WRAPPER_TO_PRIMITIVE.getOrDefault(type, type);
     }
 
     /**

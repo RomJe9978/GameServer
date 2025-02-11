@@ -3,7 +3,7 @@ package com.games.framework.component.packetkit;
 import java.lang.annotation.*;
 
 /**
- * 标识监听"网络包"的最终处理方法
+ * 标识监听"Packet"的最终处理方法
  *
  * <p> 注解标识的方法，必须是{@code public static}的，可以供外部访问的，
  * 使用{@code static}是为了直接进行方法调用，而不用对类进行实例化。

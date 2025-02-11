@@ -11,26 +11,26 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MathUtilTest {
 
     /**
-     * {@link MathUtil#isInRange(long, long, long)}
+     * {@link MathUtil#inRange(long, long, long)}
      */
     @Test
     public void testIsInRange() {
         int min = Integer.MIN_VALUE;
         int max = Integer.MAX_VALUE;
-        assertTrue(MathUtil.isInRange(min, min, min));
-        assertTrue(MathUtil.isInRange(min, min, max));
-        assertFalse(MathUtil.isInRange(min, max, min));
-        assertFalse(MathUtil.isInRange(min, max, max));
+        assertTrue(MathUtil.inRange(min, min, min));
+        assertTrue(MathUtil.inRange(min, min, max));
+        assertFalse(MathUtil.inRange(min, max, min));
+        assertFalse(MathUtil.inRange(min, max, max));
 
-        assertFalse(MathUtil.isInRange(max, min, min));
-        assertTrue(MathUtil.isInRange(max, min, max));
-        assertFalse(MathUtil.isInRange(max, max, min));
-        assertTrue(MathUtil.isInRange(max, max, max));
+        assertFalse(MathUtil.inRange(max, min, min));
+        assertTrue(MathUtil.inRange(max, min, max));
+        assertFalse(MathUtil.inRange(max, max, min));
+        assertTrue(MathUtil.inRange(max, max, max));
 
-        assertFalse(MathUtil.isInRange(0, min, min));
-        assertTrue(MathUtil.isInRange(0, min, max));
-        assertFalse(MathUtil.isInRange(0, max, min));
-        assertFalse(MathUtil.isInRange(0, max, max));
+        assertFalse(MathUtil.inRange(0, min, min));
+        assertTrue(MathUtil.inRange(0, min, max));
+        assertFalse(MathUtil.inRange(0, max, min));
+        assertFalse(MathUtil.inRange(0, max, max));
     }
 
     /**

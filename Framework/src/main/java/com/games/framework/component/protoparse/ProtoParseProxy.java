@@ -10,7 +10,7 @@ import javassist.CtMethod;
 import java.util.Map;
 
 /**
- * "Proto Buffer"消息相关的转换类
+ * "Proto Buffer"消息相关的转换器代理类
  *
  * @author liu xuan jie
  */
@@ -18,6 +18,9 @@ public enum ProtoParseProxy implements IProtoParser {
 
     INSTANCE;
 
+    /**
+     * 真实包装的“协议转换器”
+     */
     private IProtoParser realParser;
 
     @Override

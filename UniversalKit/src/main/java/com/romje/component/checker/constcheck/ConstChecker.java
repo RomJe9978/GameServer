@@ -1,8 +1,8 @@
 package com.romje.component.checker.constcheck;
 
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -61,7 +61,7 @@ public final class ConstChecker {
 
         Map<Object, List<String>> valueToFieldsMap = new HashMap<>();
         for (Field field : fields) {
-            if (!ReflectionUtil.isStaticFinalField(field)) {
+            if (!ClassUtil.isStaticFinalField(field)) {
                 continue;
             }
 

@@ -2,8 +2,8 @@ package com.romje.component.manager.enumlookup;
 
 import com.romje.constants.StringConst;
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -111,7 +111,7 @@ public enum EnumLookup {
         Objects.requireNonNull(enumClassList);
         Map<Class<? extends Enum<?>>, Map<Object, Enum<?>>> tempMap = new HashMap<>();
         for (Class<? extends Enum<?>> clazz : enumClassList) {
-            List<Field> fieldList = ReflectionUtil.getFieldsWithAnnotation(clazz, EnumKey.class);
+            List<Field> fieldList = ClassUtil.getFieldsWithAnnotation(clazz, EnumKey.class);
             if (EmptyUtil.isEmpty(fieldList)) {
                 continue;
             }
@@ -143,7 +143,7 @@ public enum EnumLookup {
      */
     public BoolResult buildKeyToInstanceMap(Class<? extends Enum<?>> clazz, Field keyField)
             throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        Enum<?>[] enumInstances = ReflectionUtil.getEnumValues(clazz);
+        Enum<?>[] enumInstances = ClassUtil.getEnumValues(clazz);
         if (EmptyUtil.isEmpty(enumInstances)) {
             return BoolResult.success(StringConst.BLANK_STRING, Collections.emptyMap());
         }

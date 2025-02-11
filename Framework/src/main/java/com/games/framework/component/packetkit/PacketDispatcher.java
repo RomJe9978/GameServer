@@ -4,8 +4,8 @@ import com.games.framework.log.Log;
 import com.games.framework.utils.ByteBuddyUtil;
 import com.games.framework.utils.ScanUtil;
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -106,7 +106,7 @@ public enum PacketDispatcher {
      * @return 任何错误或者异常返回{@code false}，失败信息在{@link BoolResult#message()}中。
      */
     public BoolResult registerPacketListener(Class<?> handlerClass) {
-        List<Method> annotatedMethods = ReflectionUtil.getMethodsWithAnnotation(handlerClass, PacketListener.class);
+        List<Method> annotatedMethods = ClassUtil.getMethodsWithAnnotation(handlerClass, PacketListener.class);
         if (EmptyUtil.isEmpty(annotatedMethods)) {
             return BoolResult.success();
         }
@@ -129,7 +129,7 @@ public enum PacketDispatcher {
      */
     private BoolResult registerListenMethod(Class<?> handlerClass, Method method) {
         // 监听方法必须是静态的
-        if (ReflectionUtil.nonStaticMethod(method)) {
+        if (ClassUtil.nonStaticMethod(method)) {
             return BoolResult.fail("packet listener method non static: " + method.getName());
         }
 

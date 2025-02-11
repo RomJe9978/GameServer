@@ -73,6 +73,13 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
 
+        <!--log4j2异步logger对高性能框架disruptor的依赖-->
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+
         <!--字节码处理库-->
         <dependency>
             <groupId>net.bytebuddy</groupId>

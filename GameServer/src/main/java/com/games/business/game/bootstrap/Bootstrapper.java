@@ -5,10 +5,12 @@ import com.games.business.game.component.LoggerRepository;
 import com.games.business.log.Log;
 import com.games.framework.component.checker.CleanUpChecker;
 import com.games.framework.component.eventkit.EventDispatcher;
+import com.games.framework.component.messagekit.MessageDispatcher;
 import com.games.framework.component.packetkit.PacketDispatcher;
 import com.games.framework.component.packetkit.PacketListenerEntry;
 import com.games.framework.component.protoparse.ProtoParseProxy;
 import com.games.framework.component.xlskit.XlsLoader;
+import com.games.framework.engine.ServerEngine;
 import com.games.framework.utils.BootstrapUtil;
 import com.games.framework.utils.ScanUtil;
 import com.google.protobuf.GeneratedMessageV3;
@@ -18,6 +20,7 @@ import com.romje.component.checker.enumcheck.EnumChecker;
 import com.romje.component.checker.enumcheck.EnumUnique;
 import com.romje.component.manager.enumlookup.EnumLookup;
 import com.romje.component.pool.object.Reusable;
+import com.romje.component.rate.TimeTicker;
 import com.romje.model.BoolResult;
 import com.romje.utils.EmptyUtil;
 
@@ -43,10 +46,30 @@ public final class Bootstrapper {
 
         BootstrapUtil.exitOnFailure(registerEnums(), "register enum");
         BootstrapUtil.exitOnFailure(registerEventListener(), "register event");
+        BootstrapUtil.exitOnFailure(registerMessageListener(), "register message");
         BootstrapUtil.exitOnFailure(registerPacketListener(), "register packet");
         BootstrapUtil.exitOnFailure(registerPacketParser(), "register packet parser");
 
         BootstrapUtil.exitOnFailure(loadXlsData(), "load excel");
+
+        BootstrapUtil.exitOnFailure(bootEngine(), "boot engine");
+
+        // 测试进程钩子
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            @Override
+//            public void run() {
+//                Log.LOGIC.info("[System] system shutdown!");
+//            }
+//        });
+
+    }
+
+    private static boolean bootEngine() {
+        TimeTicker timeTicker = TimeTicker.of(100);
+        ServerEngine.INSTANCE.setTimeTicker(timeTicker);
+        boolean result = ServerEngine.INSTANCE.start();
+        Log.LOGIC.info("[Boot] Server engine boot success, tick:[{}] ms!", 100);
+        return result;
     }
 
     private static boolean registerEnums() {
@@ -160,13 +183,25 @@ public final class Bootstrapper {
 
     private static boolean registerPacketListener() {
         PacketDispatcher.INSTANCE.setShow(true);
-        BoolResult boolResult = PacketDispatcher.INSTANCE.registerPacketListener(BootParameters.SCAN_EVENT_LISTENER_PACKAGE_NAME);
+        BoolResult boolResult = PacketDispatcher.INSTANCE.registerPacketListener(BootParameters.SCAN_PACKET_LISTENER_PACKAGE_NAME);
         if (boolResult.isFail()) {
             Log.LOGIC.error("[Boot] Register packet listener fail:[{}]!", boolResult.message());
             return false;
         }
 
         Log.LOGIC.info("[Boot] Register packet listener finish! Package name:[{}]", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
+        return true;
+    }
+
+    private static boolean registerMessageListener() {
+        MessageDispatcher.INSTANCE.setShow(true);
+        BoolResult boolResult = MessageDispatcher.INSTANCE.registerMessageListener(BootParameters.SCAN_MESSAGE_LISTENER_PACKAGE_NAME);
+        if (boolResult.isFail()) {
+            Log.LOGIC.error("[Boot] Register message listener fail:[{}]!", boolResult.message());
+            return false;
+        }
+
+        Log.LOGIC.info("[Boot] Register message listener finish! Package name:[{}]", BootParameters.SCAN_REUSABLE_PACKAGE_NAME);
         return true;
     }
 
@@ -196,7 +231,6 @@ public final class Bootstrapper {
             return false;
         }
         Log.LOGIC.info("[Boot] Load all excel manager success! Package name:[{}]", BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
-
 
         BoolResult assembleResult = XlsLoader.INSTANCE.loadXlsAssembler(BootParameters.SCAN_XLS_HANDLER_PACKAGE_NAME);
         if (assembleResult.isFail()) {

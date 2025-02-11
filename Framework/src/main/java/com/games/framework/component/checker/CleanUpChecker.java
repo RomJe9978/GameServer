@@ -2,8 +2,8 @@ package com.games.framework.component.checker;
 
 import com.games.framework.utils.ByteBuddyUtil;
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -62,7 +62,7 @@ public class CleanUpChecker {
      * 2.检查是否调用了父类的清除方法,只关心一层父类即可，更高层的父类由直接关联的子类检查即可
      */
     private static BoolResult checkCleanUp(Class<?> clazz, String methodName) throws IOException {
-        if (!ReflectionUtil.hasDeclaredMethod(clazz, methodName)) {
+        if (!ClassUtil.hasDeclaredMethod(clazz, methodName)) {
             return BoolResult.fail(clazz.getName() + " not has clean up method explicitly!");
         }
 
@@ -72,7 +72,7 @@ public class CleanUpChecker {
         }
 
         Class<?> parentClass = clazz.getSuperclass();
-        if (ReflectionUtil.hasPublicMethod(parentClass, methodName)) {
+        if (ClassUtil.hasPublicMethod(parentClass, methodName)) {
             boolean isCalled = ByteBuddyUtil.checkSuperMethodCall(clazz, parentClass, methodName);
             if (!isCalled) {
                 return BoolResult.fail(clazz.getName() + " non called super clean up method!");

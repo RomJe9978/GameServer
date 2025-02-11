@@ -4,9 +4,9 @@ import com.games.framework.log.Log;
 import com.games.framework.utils.ByteBuddyUtil;
 import com.games.framework.utils.ScanUtil;
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.CollectionUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -107,7 +107,7 @@ public enum EventDispatcher {
      * @return 任何错误或者异常返回{@code false}，失败信息在{@link BoolResult#message()}中。
      */
     public BoolResult registerEventListener(Class<?> eventHandleClass) {
-        List<Method> annotatedMethods = ReflectionUtil.getMethodsWithAnnotation(eventHandleClass, EventListener.class);
+        List<Method> annotatedMethods = ClassUtil.getMethodsWithAnnotation(eventHandleClass, EventListener.class);
         if (EmptyUtil.isEmpty(annotatedMethods)) {
             return BoolResult.success();
         }
@@ -130,7 +130,7 @@ public enum EventDispatcher {
      */
     private BoolResult registerListenMethod(Class<?> eventHandleClass, Method method) {
         // 监听方法必须是静态的
-        if (ReflectionUtil.nonStaticMethod(method)) {
+        if (ClassUtil.nonStaticMethod(method)) {
             return BoolResult.fail("event listener method non static: " + method.getName());
         }
 

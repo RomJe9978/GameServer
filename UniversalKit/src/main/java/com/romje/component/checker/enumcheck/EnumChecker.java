@@ -1,8 +1,8 @@
 package com.romje.component.checker.enumcheck;
 
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -42,7 +42,7 @@ public final class EnumChecker {
         // key:出现重复的类名，value:错误描述
         Map<String, List<String>> failMessageMap = new HashMap<>();
         for (Class<? extends Enum<?>> clazz : enumClassList) {
-            List<Field> fieldList = ReflectionUtil.getFieldsWithAnnotation(clazz, fieldAnnotation);
+            List<Field> fieldList = ClassUtil.getFieldsWithAnnotation(clazz, fieldAnnotation);
             for (Field field : fieldList) {
                 BoolResult result = checkFieldUnique(clazz, field.getName());
                 if (result.isFail()) {
@@ -69,7 +69,7 @@ public final class EnumChecker {
      */
     public static BoolResult checkFieldUnique(Class<? extends Enum<?>> clazz, String fieldName)
             throws NoSuchFieldException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        Object[] enumInstances = ReflectionUtil.getEnumValues(clazz);
+        Object[] enumInstances = ClassUtil.getEnumValues(clazz);
         if (Objects.isNull(enumInstances) || enumInstances.length == 0) {
             return BoolResult.success();
         }

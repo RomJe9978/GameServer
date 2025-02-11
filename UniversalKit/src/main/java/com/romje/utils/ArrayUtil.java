@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 数组操作的工具类
+ * 数组操作的工具类，不允许实例化
  *
  * @author liu xuan jie
  */
@@ -38,7 +38,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Byte> asList(final byte[] array) {
+    public static List<Byte> toList(final byte[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -56,7 +56,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Short> asList(final short[] array) {
+    public static List<Short> toList(final short[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -74,7 +74,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Character> asList(final char[] array) {
+    public static List<Character> toList(final char[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -92,7 +92,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Boolean> asList(final boolean[] array) {
+    public static List<Boolean> toList(final boolean[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -110,7 +110,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Integer> asList(final int[] array) {
+    public static List<Integer> toList(final int[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -128,7 +128,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Long> asList(final long[] array) {
+    public static List<Long> toList(final long[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -146,7 +146,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Float> asList(final float[] array) {
+    public static List<Float> toList(final float[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -164,7 +164,7 @@ public final class ArrayUtil {
      * @param array 原始基本类型数组
      * @return 没有元素会返回{@code emptyList()},不会返回{@code null}
      */
-    public static List<Double> asList(final double[] array) {
+    public static List<Double> toList(final double[] array) {
         if (EmptyUtil.isEmpty(array)) {
             return Collections.emptyList();
         }
@@ -183,7 +183,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final byte[] array, byte target) {
+    public static boolean isContains(final byte[] array, byte target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (byte temp : array) {
                 if (temp == target) {
@@ -201,7 +201,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final byte[] array, byte target) {
+    public static boolean nonContains(final byte[] array, byte target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -212,7 +212,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final short[] array, short target) {
+    public static boolean isContains(final short[] array, short target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (short temp : array) {
                 if (temp == target) {
@@ -230,7 +230,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final short[] array, short target) {
+    public static boolean nonContains(final short[] array, short target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -241,7 +241,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final char[] array, char target) {
+    public static boolean isContains(final char[] array, char target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (char temp : array) {
                 if (temp == target) {
@@ -259,7 +259,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final char[] array, char target) {
+    public static boolean nonContains(final char[] array, char target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -270,7 +270,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final boolean[] array, boolean target) {
+    public static boolean isContains(final boolean[] array, boolean target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (boolean temp : array) {
                 if (temp == target) {
@@ -288,7 +288,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final boolean[] array, boolean target) {
+    public static boolean nonContains(final boolean[] array, boolean target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -299,7 +299,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final int[] array, int target) {
+    public static boolean isContains(final int[] array, int target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (int temp : array) {
                 if (temp == target) {
@@ -317,7 +317,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final int[] array, int target) {
+    public static boolean nonContains(final int[] array, int target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -328,7 +328,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final float[] array, float target) {
+    public static boolean isContains(final float[] array, float target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (float temp : array) {
                 if (Float.compare(temp, target) == 0) {
@@ -346,7 +346,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final float[] array, float target) {
+    public static boolean nonContains(final float[] array, float target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -357,7 +357,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final long[] array, long target) {
+    public static boolean isContains(final long[] array, long target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (long temp : array) {
                 if (temp == target) {
@@ -375,7 +375,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final long[] array, long target) {
+    public static boolean nonContains(final long[] array, long target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 
@@ -386,7 +386,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean isContains(final double[] array, double target) {
+    public static boolean isContains(final double[] array, double target) {
         if (EmptyUtil.nonEmpty(array)) {
             for (double temp : array) {
                 if (Double.compare(temp, target) == 0) {
@@ -404,7 +404,7 @@ public final class ArrayUtil {
      * @param target 被检查的对应类型的值
      * @return 当数组不包含指定值的时候，返回{@code true}
      */
-    public static <T> boolean nonContains(final double[] array, double target) {
+    public static boolean nonContains(final double[] array, double target) {
         return Objects.isNull(array) || !isContains(array, target);
     }
 

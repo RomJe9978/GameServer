@@ -1,9 +1,9 @@
 package com.games.business.game.component;
 
 import com.romje.model.BoolResult;
+import com.romje.utils.ClassUtil;
 import com.romje.utils.CollectionUtil;
 import com.romje.utils.EmptyUtil;
-import com.romje.utils.ReflectionUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
@@ -70,7 +70,7 @@ public final class Log4j2LoggerChecker {
      */
     public static BoolResult checkLoggerConfigured(Class<?> clazz, Set<String> configNameSet) {
         Objects.requireNonNull(clazz);
-        List<Field> fieldList = ReflectionUtil.getFieldsWithAnnotation(clazz, LoggerCheck.class);
+        List<Field> fieldList = ClassUtil.getFieldsWithAnnotation(clazz, LoggerCheck.class);
         if (EmptyUtil.isEmpty(fieldList)) {
             return BoolResult.success();
         }

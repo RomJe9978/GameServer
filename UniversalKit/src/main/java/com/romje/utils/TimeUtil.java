@@ -18,7 +18,7 @@ public final class TimeUtil {
      * @param second 秒数
      * @return 对应的毫秒数
      */
-    public static long secondMillis(long second) {
+    public static long millisOfSecond(long second) {
         return second * TimeConst.MILLIS_OF_SECOND;
     }
 
@@ -30,7 +30,7 @@ public final class TimeUtil {
      * @return 对应的毫秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long secondMillisSafe(long second) {
+    public static long millisOfSecondSafe(long second) {
         return Math.multiplyExact(second, TimeConst.MILLIS_OF_SECOND);
     }
 
@@ -40,7 +40,7 @@ public final class TimeUtil {
      * @param minute 分钟数
      * @return 对应的毫秒数
      */
-    public static long minuteMillis(long minute) {
+    public static long millisOfMinute(long minute) {
         return minute * TimeConst.MILLIS_OF_MINUTE;
     }
 
@@ -52,7 +52,7 @@ public final class TimeUtil {
      * @return 对应的毫秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long minuteMillisSafe(long minute) {
+    public static long millisOfMinuteSafe(long minute) {
         return Math.multiplyExact(minute, TimeConst.MILLIS_OF_MINUTE);
     }
 
@@ -62,7 +62,7 @@ public final class TimeUtil {
      * @param hour 小时数
      * @return 对应的毫秒数
      */
-    public static long hourMillis(long hour) {
+    public static long millisOfHour(long hour) {
         return hour * TimeConst.MILLIS_OF_HOUR;
     }
 
@@ -74,7 +74,7 @@ public final class TimeUtil {
      * @return 对应的毫秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long hourMillisSafe(long hour) {
+    public static long millisOfHourSafe(long hour) {
         return Math.multiplyExact(hour, TimeConst.MILLIS_OF_HOUR);
     }
 
@@ -84,7 +84,7 @@ public final class TimeUtil {
      * @param day 天数
      * @return 对应的毫秒数
      */
-    public static long dayMillis(long day) {
+    public static long millisOfDay(long day) {
         return day * TimeConst.MILLIS_OF_DAY;
     }
 
@@ -96,7 +96,7 @@ public final class TimeUtil {
      * @return 对应的毫秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long dayMillisSafe(long day) {
+    public static long millisOfDaySafe(long day) {
         return Math.multiplyExact(day, TimeConst.MILLIS_OF_DAY);
     }
 
@@ -106,7 +106,7 @@ public final class TimeUtil {
      * @param week 周数
      * @return 对应的毫秒数
      */
-    public static long weekMillis(long week) {
+    public static long millisOfWeek(long week) {
         return week * TimeConst.MILLIS_OF_WEEK;
     }
 
@@ -118,30 +118,30 @@ public final class TimeUtil {
      * @return 对应的毫秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long weekMillisSafe(long week) {
+    public static long millisOfWeekSafe(long week) {
         return Math.multiplyExact(week, TimeConst.MILLIS_OF_WEEK);
     }
 
     /**
-     * 将秒转换为分钟。
+     * 将分钟转换为秒。
      *
-     * @param second 秒数
-     * @return 对应的分钟数
+     * @param minute 分钟数
+     * @return 对应的秒数
      */
-    public static long minuteSeconds(long second) {
-        return second * TimeConst.SECONDS_OF_MINUTE;
+    public static long secondsOfMinute(long minute) {
+        return minute * TimeConst.SECONDS_OF_MINUTE;
     }
 
     /**
-     * 安全地将秒转换为分钟。
+     * 安全地将分钟转换为秒。
      * 使用{@link Math#multiplyExact(long, int)}检查溢出。
      *
-     * @param second 秒数
-     * @return 对应的分钟数
+     * @param minute 分钟数
+     * @return 对应的秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long minuteSecondsSafe(long second) {
-        return Math.multiplyExact(second, TimeConst.SECONDS_OF_MINUTE);
+    public static long secondsOfMinuteSafe(long minute) {
+        return Math.multiplyExact(minute, TimeConst.SECONDS_OF_MINUTE);
     }
 
     /**
@@ -150,7 +150,7 @@ public final class TimeUtil {
      * @param hour 小时数
      * @return 对应的秒数
      */
-    public static long hourSeconds(long hour) {
+    public static long secondsOfHour(long hour) {
         return hour * TimeConst.SECONDS_OF_HOUR;
     }
 
@@ -162,7 +162,7 @@ public final class TimeUtil {
      * @return 对应的秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long hourSecondsSafe(long hour) {
+    public static long secondsOfHourSafe(long hour) {
         return Math.multiplyExact(hour, TimeConst.SECONDS_OF_HOUR);
     }
 
@@ -172,7 +172,7 @@ public final class TimeUtil {
      * @param day 天数
      * @return 对应的秒数
      */
-    public static long daySeconds(long day) {
+    public static long secondsOfDay(long day) {
         return day * TimeConst.SECONDS_OF_DAY;
     }
 
@@ -184,7 +184,7 @@ public final class TimeUtil {
      * @return 对应的秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long daySecondsSafe(long day) {
+    public static long secondsOfDaySafe(long day) {
         return Math.multiplyExact(day, TimeConst.SECONDS_OF_DAY);
     }
 
@@ -194,7 +194,7 @@ public final class TimeUtil {
      * @param week 周数
      * @return 对应的秒数
      */
-    public static long weekSeconds(long week) {
+    public static long secondsOfWeek(long week) {
         return week * TimeConst.SECONDS_OF_WEEK;
     }
 
@@ -206,7 +206,7 @@ public final class TimeUtil {
      * @return 对应的秒数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long weekSecondsSafe(long week) {
+    public static long secondsOfWeekSafe(long week) {
         return Math.multiplyExact(week, TimeConst.SECONDS_OF_WEEK);
     }
 
@@ -216,7 +216,7 @@ public final class TimeUtil {
      * @param hour 小时数
      * @return 对应的分钟数
      */
-    public static long hourMinutes(long hour) {
+    public static long minutesOfHour(long hour) {
         return hour * TimeConst.MINUTES_OF_HOUR;
     }
 
@@ -228,7 +228,7 @@ public final class TimeUtil {
      * @return 对应的分钟数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long hourMinutesSafe(long hour) {
+    public static long minutesOfHourSafe(long hour) {
         return Math.multiplyExact(hour, TimeConst.MINUTES_OF_HOUR);
     }
 
@@ -238,7 +238,7 @@ public final class TimeUtil {
      * @param day 天数
      * @return 对应的分钟数
      */
-    public static long dayMinutes(long day) {
+    public static long minutesOfDay(long day) {
         return day * TimeConst.MINUTE_OF_DAY;
     }
 
@@ -250,7 +250,7 @@ public final class TimeUtil {
      * @return 对应的分钟数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long dayMinutesSafe(long day) {
+    public static long minutesOfDaySafe(long day) {
         return Math.multiplyExact(day, TimeConst.MINUTE_OF_DAY);
     }
 
@@ -260,7 +260,7 @@ public final class TimeUtil {
      * @param week 周数
      * @return 对应的分钟数
      */
-    public static long weekMinutes(long week) {
+    public static long minutesOfWeek(long week) {
         return week * TimeConst.MINUTES_OF_WEEK;
     }
 
@@ -272,7 +272,7 @@ public final class TimeUtil {
      * @return 对应的分钟数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long weekMinutesSafe(long week) {
+    public static long minutesOfWeekSafe(long week) {
         return Math.multiplyExact(week, TimeConst.MINUTES_OF_WEEK);
     }
 
@@ -282,7 +282,7 @@ public final class TimeUtil {
      * @param day 天数
      * @return 对应的小时数
      */
-    public static long dayHours(long day) {
+    public static long hoursOfDay(long day) {
         return day * TimeConst.HOURS_OF_DAY;
     }
 
@@ -294,7 +294,7 @@ public final class TimeUtil {
      * @return 对应的小时数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long dayHoursSafe(long day) {
+    public static long hoursOfDaySafe(long day) {
         return Math.multiplyExact(day, TimeConst.HOURS_OF_DAY);
     }
 
@@ -304,7 +304,7 @@ public final class TimeUtil {
      * @param week 周数
      * @return 对应的小时数
      */
-    public static long weekHours(long week) {
+    public static long hoursOfWeek(long week) {
         return week * TimeConst.HOURS_OF_WEEK;
     }
 
@@ -316,7 +316,7 @@ public final class TimeUtil {
      * @return 对应的小时数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long weekHoursSafe(long week) {
+    public static long hoursOfWeekSafe(long week) {
         return Math.multiplyExact(week, TimeConst.HOURS_OF_WEEK);
     }
 
@@ -326,7 +326,7 @@ public final class TimeUtil {
      * @param week 周数
      * @return 对应的天数
      */
-    public static long weekDays(long week) {
+    public static long daysOfWeek(long week) {
         return week * TimeConst.DAYS_OF_WEEK;
     }
 
@@ -338,7 +338,7 @@ public final class TimeUtil {
      * @return 对应的天数
      * @throws ArithmeticException 如果乘法结果溢出
      */
-    public static long weekDaysSafe(long week) {
+    public static long daysOfWeekSafe(long week) {
         return Math.multiplyExact(week, TimeConst.DAYS_OF_WEEK);
     }
 }

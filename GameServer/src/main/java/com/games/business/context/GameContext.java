@@ -53,7 +53,7 @@ public class GameContext {
         Log.LOGIC.info("[Clock] Game config time offset minutes is:{}", configOffset);
 
         long millis = Math.multiplyExact(configOffset, TimeConst.MILLIS_OF_MINUTE);
-        ClockContext.setClock(OffsetClock.newInstance(millis));
+        ClockContext.setClock(OffsetClock.of(millis));
         Log.LOGIC.info("[Clock] Init clock finish: {}!", ClockContext.getClock());
 
         long curTime = ClockContext.getClock().currentTimeMillis();

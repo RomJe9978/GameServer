@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @author liu xuan jie
  */
-public class ScanUtil {
+public final class ScanUtil {
 
     private ScanUtil() {
     }

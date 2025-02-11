@@ -29,7 +29,7 @@ public class OffsetClock implements IClock {
      * @param offsetMillis 偏移的毫秒数
      * @return 一个新的对象实例
      */
-    public static OffsetClock newInstance(long offsetMillis) {
+    public static OffsetClock of(long offsetMillis) {
         return new OffsetClock(offsetMillis);
     }
 
